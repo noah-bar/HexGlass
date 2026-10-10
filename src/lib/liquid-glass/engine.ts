@@ -1,7 +1,7 @@
 import { createDisplacementMap } from './displacementMap';
 
 /* Surfaces whose blur layer can refract: the stylesheet reads --hx-liquid-refraction on each of them. */
-const SURFACES = ['glass-thin', 'glass', 'glass-strong', 'glass-dialog', 'glass-clear', 'glass-stained', 'glass-ring']
+const SURFACES = ['glass-thin', 'glass', 'glass-strong', 'glass-dialog', 'glass-stained', 'glass-ring']
   .map((name) => `[class~="hx:${name}"]`)
   .join(',');
 const REFRACTION = '--hx-liquid-refraction';

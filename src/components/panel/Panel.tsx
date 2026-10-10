@@ -12,8 +12,6 @@ export const panelVariants = cva(
         thin: 'hx:glass-thin',
         default: 'hx:glass',
         strong: 'hx:glass-strong',
-        // Over photos and video: nearly transparent, white text in both themes.
-        clear: 'hx:glass-clear',
       },
     },
     defaultVariants: {

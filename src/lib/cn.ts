@@ -10,7 +10,6 @@ const twMerge = extendTailwindMerge<'glass'>({
         'glass',
         'glass-strong',
         'glass-dialog',
-        'glass-clear',
         'glass-tint',
         'glass-stained',
         'glass-ring',
