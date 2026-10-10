@@ -1,8 +1,11 @@
 import { withThemeByClassName } from '@storybook/addon-themes';
 import type { Preview } from '@storybook/react-vite';
 import { Backdrop, type BackdropProps } from '../src/components/backdrop/Backdrop';
-import { LiquidGlass } from '../src/components/liquid-glass/LiquidGlass';
+import { startLiquidGlassWhenReady } from '../src/lib/liquid-glass/engine';
 import './preview.css';
+
+// Stories import components directly, not the library entry that starts the refraction.
+startLiquidGlassWhenReady();
 
 const backdropImage = {
   light: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1600&q=80',
@@ -36,7 +39,7 @@ const preview: Preview = {
     },
   },
   initialGlobals: {
-    // Clear liquid glass needs a picture behind it; other backgrounds fall back to regular liquid glass in light.
+    // Glass needs a picture behind it to show through; a plain light page keeps the regular veils.
     backdrop: 'image',
   },
   decorators: [
@@ -51,7 +54,6 @@ const preview: Preview = {
             ) : (
               <Backdrop position="absolute" variant={backdrop} />
             ))}
-          <LiquidGlass clear="auto" />
           <Story />
         </div>
       );
