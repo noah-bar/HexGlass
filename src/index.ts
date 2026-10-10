@@ -8,6 +8,12 @@ export { cn } from './lib/cn';
 export { startLiquidGlass } from './lib/liquid-glass/engine';
 export { useDebouncedValue } from './hooks/useDebouncedValue';
 export { useMediaQuery } from './hooks/useMediaQuery';
+export {
+  liquidGlassScript,
+  useLiquidGlass,
+  type LiquidGlassPreferences,
+  type UseLiquidGlassResult,
+} from './hooks/useLiquidGlass';
 export { themeScript, useTheme, type ResolvedTheme, type Theme, type UseThemeResult } from './hooks/useTheme';
 
 export {

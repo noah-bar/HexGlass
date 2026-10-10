@@ -24,7 +24,7 @@ type Surface = { width: number; height: number; settledAt: number; filter?: stri
 
 /* Only Chromium runs SVG filters in backdrop-filter. Other engines accept the syntax and then drop the whole
    declaration, blur included. */
-function canRefract() {
+export function supportsRefraction() {
   return /Chrome\//.test(navigator.userAgent) && !window.matchMedia('(prefers-reduced-transparency: reduce)').matches;
 }
 
@@ -99,7 +99,7 @@ function createFilterNode({ id, width, height, scale, fringe }: Shape, href: str
 }
 
 function run(): () => void {
-  if (!canRefract()) return () => {};
+  if (!supportsRefraction()) return () => {};
 
   const defs = svg('svg', { 'aria-hidden': 'true', width: 0, height: 0 });
   defs.style.cssText = 'position:fixed;pointer-events:none';
