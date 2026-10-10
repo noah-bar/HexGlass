@@ -654,7 +654,7 @@ The defaults are set with CSS variables, on the root or on any subtree:
 
 ```css
 :root {
-  --hx-liquid-blur: 8px; /* blur of a pane (6px in the dark theme) */
+  --hx-liquid-blur: 6px; /* blur of a pane */
   --hx-liquid-bezel: 28px; /* width of the refracting rim */
   --hx-liquid-bend: 30px; /* how far the rim shifts what is behind it; 0 keeps a surface flat */
   --hx-liquid-fringe: 0; /* color fringing in the rim, 0 to 1: triples the work of each surface */

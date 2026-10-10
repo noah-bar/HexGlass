@@ -128,10 +128,10 @@
   --hx-liquid-bend: 30px;
   --hx-liquid-fringe: 0;
   /* A light blur, so the bent rim stays legible. */
-  --hx-liquid-blur: 8px;
+  --hx-liquid-blur: 6px;
   /* How a pane evens out what is behind it once it has something to show through (see "Panes over a picture").
      Light theme: lift dark areas far more than bright ones, into a pale wash dark text holds on. */
-  --hx-pane-tone: contrast(0.35) brightness(1.6);
+  --hx-pane-tone: contrast(0.45) brightness(1.7);
   /* Inner glow of a pane's thickness. */
   --hx-liquid-rim: inset 0 0 14px -4px rgb(255 255 255 / 0.7);
 

@@ -64,7 +64,7 @@ function update(preferences: LiquidGlassPreferences) {
 }
 
 type Snapshot = `${number}:${boolean}:${boolean}:${boolean}`;
-const SERVER_SNAPSHOT: Snapshot = '8:true:false:false';
+const SERVER_SNAPSHOT: Snapshot = '6:true:false:false';
 
 function getSnapshot(): Snapshot {
   const { blur, refraction } = read();
