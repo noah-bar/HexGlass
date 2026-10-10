@@ -5,7 +5,9 @@ const SURFACES = ['glass-thin', 'glass', 'glass-strong', 'glass-dialog', 'glass-
   .join(',');
 const REFRACTION = '--hx-liquid-refraction';
 const SVG_NS = 'http://www.w3.org/2000/svg';
-const MIN_SIZE = 24;
+/* Smaller surfaces (buttons, chips) stay flat: their rim is too thin to read, and dozens of them refracting
+   while a form scrolls make it stutter. */
+const MIN_SIZE = 48;
 /* A resizing surface drops its refraction until its size has held this long: redrawing a map on every frame of
    an animation makes it stutter. */
 const SETTLE_MS = 140;
@@ -110,7 +112,7 @@ function run(): () => void {
   const dirty = new Set<HTMLElement>();
   // Elements whose style the engine has just written, so its own writes are not taken for a change.
   const written = new Set<HTMLElement>();
-  let rescan = true;
+  let removed = false;
   let frame = 0;
   let timer = 0;
 
@@ -178,26 +180,30 @@ function run(): () => void {
     return false;
   }
 
-  function collect() {
-    const found = new Set(document.querySelectorAll<HTMLElement>(SURFACES));
-    for (const element of found) {
-      if (surfaces.has(element)) continue;
-      surfaces.set(element, { width: 0, height: 0, settledAt: 0 });
-      resizes.observe(element);
-      dirty.add(element);
-    }
-    for (const [element, surface] of surfaces) {
-      if (found.has(element)) continue;
-      assign(element, surface, undefined);
-      resizes.unobserve(element);
-      surfaces.delete(element);
-    }
+  function track(element: HTMLElement) {
+    if (surfaces.has(element)) return;
+    surfaces.set(element, { width: 0, height: 0, settledAt: 0 });
+    resizes.observe(element);
+    dirty.add(element);
+  }
+
+  function untrack(element: HTMLElement, surface: Surface) {
+    assign(element, surface, undefined);
+    resizes.unobserve(element);
+    surfaces.delete(element);
+  }
+
+  function trackWithin(root: ParentNode) {
+    if (root instanceof HTMLElement && root.matches(SURFACES)) track(root);
+    for (const element of root.querySelectorAll<HTMLElement>(SURFACES)) track(element);
   }
 
   function flush() {
     frame = 0;
-    if (rescan) collect();
-    rescan = false;
+    if (removed) {
+      for (const [element, surface] of surfaces) if (!element.isConnected) untrack(element, surface);
+      removed = false;
+    }
 
     const now = performance.now();
     const batch = [...dirty];
@@ -221,16 +227,36 @@ function run(): () => void {
     schedule();
   });
 
-  // A class or style on any ancestor can change the shape or the tokens of the surfaces under it.
+  // Only what a change can reach is looked at again: the nodes it added or removed, and, since a class or
+  // style on any ancestor can change the shape or the tokens of the surfaces under it, those surfaces.
   const mutations = new MutationObserver((records) => {
-    for (const { type, target, attributeName } of records) {
+    for (const { type, target, attributeName, addedNodes, removedNodes } of records) {
       if (defs.contains(target)) continue;
-      if (type === 'childList' || attributeName === 'class') rescan = true;
-      if (type !== 'attributes' || (attributeName === 'style' && written.has(target as HTMLElement))) continue;
-      for (const element of surfaces.keys()) if (target.contains(element)) dirty.add(element);
+      if (type === 'childList') {
+        for (const node of addedNodes) if (node instanceof Element) trackWithin(node);
+        removed ||= removedNodes.length > 0;
+        continue;
+      }
+
+      const element = target as HTMLElement;
+      const surface = surfaces.get(element);
+      if (attributeName === 'class') {
+        const matches = element.matches(SURFACES);
+        if (matches && !surface) track(element);
+        else if (!matches && surface) {
+          untrack(element, surface);
+          // A flush drops the filter it no longer uses.
+          removed = true;
+        }
+      } else if (written.has(element)) {
+        continue;
+      }
+      if (surfaces.has(element)) dirty.add(element);
+      if (!element.firstElementChild) continue;
+      for (const other of surfaces.keys()) if (element.contains(other)) dirty.add(other);
     }
     written.clear();
-    if (rescan || dirty.size > 0) schedule();
+    if (removed || dirty.size > 0) schedule();
   });
   mutations.observe(document.documentElement, {
     subtree: true,
@@ -238,6 +264,7 @@ function run(): () => void {
     attributes: true,
     attributeFilter: ['class', 'style'],
   });
+  trackWithin(document);
   schedule();
 
   return () => {
