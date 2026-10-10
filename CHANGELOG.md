@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-11
+
 ### Added
 
 - Liquid glass as the library's material: surfaces are lightly blurred panes whose rim bends what is behind them. The refraction is an SVG displacement filter drawn for each surface, started with the library and shown in Chromium browsers.
@@ -35,6 +37,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `DataTable`: the sticky header keeps the rounded top corners of its container, including its blur.
 - Menus, selects, popovers, dialogs and tooltips show their glass during the opening and closing fade instead of only once it has finished.
+- Glass surfaces fill their border in rounded corners instead of leaving a thin crescent of the raw page.
+
+### Chore
+
+- Document liquid glass in the README and the Storybook introduction, with a new screenshot.
+- Describe the package as liquid glass and add the `liquid-glass` keyword.
 
 ## [0.4.2] - 2026-10-10
 
