@@ -730,6 +730,42 @@
     backdrop-filter: var(--hx-glass-filter);
   }
 
+  /* Popups (menus, selects, popovers, dialogs, tooltips) fade in and out. An element that is not fully opaque
+     hides the page from the backdrop-filter of its descendants, so their blur layer would only show up once
+     the fade is over: popups carry the filter themselves instead, like toasts. */
+  :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog):where(
+    [data-open],
+    [data-closed],
+    [data-starting-style],
+    [data-ending-style]
+  ) {
+    -webkit-backdrop-filter: var(--hx-glass-filter);
+    backdrop-filter: var(--hx-glass-filter);
+  }
+
+  :where([data-liquid])
+    :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog):where(
+      [data-open],
+      [data-closed],
+      [data-starting-style],
+      [data-ending-style]
+    ) {
+    -webkit-backdrop-filter: blur(calc(var(--hx-liquid-blur) * var(--hx-liquid-frost, 1))) saturate(180%)
+      var(--hx-liquid-dim,) var(--hx-liquid-refraction,);
+    backdrop-filter: blur(calc(var(--hx-liquid-blur) * var(--hx-liquid-frost, 1))) saturate(180%) var(--hx-liquid-dim,)
+      var(--hx-liquid-refraction,);
+  }
+
+  :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog):not(.hx-toast):is(
+      [data-open],
+      [data-closed],
+      [data-starting-style],
+      [data-ending-style]
+    )::after {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
   /* Clear mode: every surface darkens what is behind it, except one already sitting in a darkened surface. */
   :where(
       :is([data-liquid='clear'], [data-liquid='clear-auto']:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image)))
