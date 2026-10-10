@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `DataTable`: the sticky header keeps the rounded top corners of its container, including its blur.
 - Menus, selects, popovers, dialogs and tooltips show their glass during the opening and closing fade instead of only once it has finished.
 - Glass surfaces fill their border in rounded corners instead of leaving a thin crescent of the raw page.
+- Scrolling a form with many buttons no longer stutters: surfaces under 48px, such as buttons, keep their blur and tint but are not refracted.
 
 ### Chore
 
