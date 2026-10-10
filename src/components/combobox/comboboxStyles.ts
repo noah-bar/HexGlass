@@ -1,5 +1,5 @@
 export const inputGroupClassName = [
-  'hx:glass-field hx:flex hx:w-full hx:min-w-40 hx:items-center hx:rounded-md hx:text-sm hx:text-fg',
+  'hx:glass-field hx:flex hx:w-full hx:min-w-40 hx:items-center hx:rounded-(--hx-field-radius,var(--hx-radius-md)) hx:text-sm hx:text-fg',
   'hx:transition-[border-color,box-shadow] hx:duration-150 hx:hover:border-field-border-hover',
   'hx:focus-within:border-accent hx:focus-within:ring-3 hx:focus-within:ring-ring',
   'hx:error:border-danger hx:error:ring-3 hx:error:ring-danger/15',

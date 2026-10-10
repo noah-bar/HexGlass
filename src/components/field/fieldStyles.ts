@@ -1,5 +1,6 @@
 export const fieldControlClassName = [
-  'hx:glass-field hx:rounded-md hx:text-sm hx:text-fg',
+  // Liquid glass rounds fields to match the capsule buttons (see --hx-field-radius).
+  'hx:glass-field hx:rounded-(--hx-field-radius,var(--hx-radius-md)) hx:text-sm hx:text-fg',
   'hx:transition-[border-color,box-shadow] hx:duration-150 hx:hover:border-field-border-hover',
   'hx:outline-none hx:focus-visible:border-accent hx:focus-visible:ring-3 hx:focus-visible:ring-ring',
   'hx:error:border-danger hx:error:ring-3 hx:error:ring-danger/15',
