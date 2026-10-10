@@ -61,8 +61,8 @@ export function DataTable({
       <div
         className={cn('hx:flex hx:size-full hx:min-h-0 hx:flex-col hx:overflow-hidden hx:rounded-[inherit]', className)}
       >
-        <div className="hx:min-h-0 hx:flex-1 hx:overflow-auto hx:overscroll-contain">
-          <table data-density={density} className={cn(tableClassName, 'hx:whitespace-nowrap')}>
+        <div className="hx:min-h-0 hx:flex-1 hx:overflow-auto hx:overscroll-contain hx:rounded-t-[inherit]">
+          <table data-density={density} className={cn(tableClassName, 'hx:rounded-t-[inherit] hx:whitespace-nowrap')}>
             {children}
           </table>
         </div>
@@ -78,6 +78,9 @@ export function DataTableHeader({ className, ...props }: ComponentProps<'thead'>
       className={cn(
         // Sticky on the whole thead, not each th, so the blur is one surface without seams.
         'hx:sticky hx:top-0 hx:z-10 hx:bg-glass hx:backdrop-blur-xl hx:backdrop-saturate-150',
+        // The wrapper's overflow clips the fill but not the blur, which would keep square corners: the header
+        // takes the top radius itself, handed down from the wrapper.
+        'hx:rounded-t-[inherit]',
         // Collapsed table borders don't stick: draw the separator as an inset shadow instead.
         'hx:shadow-[inset_0_-1px_0_var(--hx-glass-border)]',
         className,
