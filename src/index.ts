@@ -140,6 +140,7 @@ export { Input, type InputProps } from './components/input/Input';
 export { InputNumber, type InputNumberProps } from './components/input-number/InputNumber';
 export { Label } from './components/label/Label';
 export { LiquidGlass, type LiquidGlassProps } from './components/liquid-glass/LiquidGlass';
+export { liquidGlassScript } from './lib/liquid-glass/engine';
 export {
   Menu,
   MenuCheckboxItem,

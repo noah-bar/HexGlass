@@ -147,9 +147,12 @@
   --hx-liquid-bend: 30px;
   --hx-liquid-fringe: 0;
   --hx-liquid-blur: 8px;
-  /* Clear glass (white text over photos): a faint veil, and how much the pane darkens what is behind it. */
+  /* Clear glass (white text over photos): a faint veil, how much the pane darkens what is behind it, and how
+     much it flattens it first. Flattening pulls bright areas down far more than dark ones, so white text
+     holds over a pale sky without the whole pane turning black. */
   --hx-glass-clear: rgb(15 23 42 / 0.12);
   --hx-clear-dim: 0.68;
+  --hx-clear-flatten: 0.5;
   --hx-liquid-rim: inset 0 0 14px -4px rgb(255 255 255 / 0.7);
 
   /* Backdrop: page base + three glows (indigo, cyan, soft violet). */
@@ -166,12 +169,9 @@
 
 /* ---------------------------------------------------------------------------
  * Semantic tokens — dark
- * Clear liquid glass writes in white on every surface, so it takes the dark tokens in both themes
- * (see the block below for what it changes).
  * ------------------------------------------------------------------------- */
 .dark,
-[data-theme='dark'],
-[data-liquid='clear'] {
+[data-theme='dark'] {
   --hx-fg: #e5e7eb;
   --hx-fg-muted: #9ca3af;
   --hx-fg-subtle: #6b7280;
@@ -266,6 +266,7 @@
   --hx-liquid-blur: 6px;
   --hx-glass-clear: rgb(0 0 0 / 0.1);
   --hx-clear-dim: 0.7;
+  --hx-clear-flatten: 0.75;
   --hx-liquid-rim: inset 0 0 14px -4px rgb(255 255 255 / 0.16);
 
   --hx-backdrop-base: #0c0c0c;
@@ -289,13 +290,24 @@
 }
 
 /* ---------------------------------------------------------------------------
- * Clear liquid glass everywhere (<LiquidGlass clear />): every surface becomes a nearly transparent pane that
- * darkens what is behind it, with white text. Surfaces differ by how thick their veil is.
+ * Clear liquid glass everywhere (<LiquidGlass clear />): every surface becomes a nearly transparent pane and
+ * surfaces only differ by how thick their veil is. Text must stay readable over anything, so the pane evens out
+ * what is behind it, toward the side the theme writes on: the dark theme darkens it and writes in white, the
+ * light theme lightens it and writes in dark.
+ * `clear="auto"` only applies in the dark theme or over a Backdrop image: a plain light page has nothing to
+ * show through, so it keeps the regular liquid glass.
  * ------------------------------------------------------------------------- */
-[data-liquid='clear'] {
+:is([data-liquid='clear'], [data-liquid='clear-auto']:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image))):is(
+  .dark,
+  [data-theme='dark']
+) {
+  /* Flatten, then darken: bright areas come down far more than dark ones. */
+  --hx-clear-tone: contrast(var(--hx-clear-flatten)) brightness(var(--hx-clear-dim));
+  --hx-clear-text-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+  --hx-toast-pane: rgb(18 20 26 / 0.62);
   --hx-fg: #ffffff;
   --hx-fg-muted: rgb(255 255 255 / 0.82);
-  --hx-fg-subtle: rgb(255 255 255 / 0.64);
+  --hx-fg-subtle: rgb(255 255 255 / 0.72);
   --hx-glass-thin: rgb(0 0 0 / 0.08);
   --hx-glass: rgb(0 0 0 / 0.12);
   --hx-glass-strong: rgb(0 0 0 / 0.34);
@@ -310,6 +322,8 @@
   --hx-glass-hover: rgb(255 255 255 / 0.14);
   --hx-glass-active: rgb(255 255 255 / 0.2);
   --hx-glass-raised: rgb(255 255 255 / 0.16);
+  /* Dialogs darken what is behind them themselves: a lighter veil is enough to set them apart. */
+  --hx-glass-overlay: rgb(0 0 0 / 0.4);
   /* Colored buttons: tinted glass dense enough for white text (≥ 4.5:1 over a darkened bright photo). */
   --hx-primary-stain-text: #ffffff;
   --hx-danger-stain-text: #ffffff;
@@ -323,17 +337,33 @@
   --hx-field-inset: rgb(0 0 0 / 0.18);
   /* Accent as text on darkened glass (outline buttons, links, check marks). */
   --hx-accent: #c7d2fe;
+  /* Status and error text: pale tints, readable on a pane of any hue. */
+  --hx-success-text: #bbf7d0;
+  --hx-warning-text: #fde68a;
+  --hx-info-text: #c7d2fe;
+  --hx-neutral-text: #e2e8f0;
+  --hx-danger-text: #fecaca;
 }
 
-/* The page itself keeps the light theme: its backdrop, and panes that darken a bright page more. */
-[data-liquid='clear']:not(.dark, [data-theme='dark']) {
-  --hx-clear-dim: 0.68;
-  --hx-backdrop-base: #eef0f5;
-  --hx-backdrop-accent-1: color-mix(in oklch, var(--hx-brand) 40%, transparent);
-  --hx-backdrop-accent-2: rgb(34 211 238 / 0.3);
-  --hx-backdrop-accent-3: rgb(167 139 250 / 0.45);
-  --hx-backdrop-subtle-opacity: 0.8;
-  --hx-backdrop-line: rgb(0 0 0 / 0.05);
+/* Light theme: no dark veil. The pane lifts dark areas far more than bright ones, into a pale wash of the
+   page's own colors that dark text holds on. */
+:is([data-liquid='clear'], [data-liquid='clear-auto']:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image))):not(
+  .dark,
+  [data-theme='dark']
+) {
+  --hx-clear-tone: contrast(0.35) brightness(1.6);
+  --hx-clear-text-shadow: none;
+  --hx-toast-pane: rgb(255 255 255 / 0.72);
+  --hx-glass-thin: rgb(255 255 255 / 0.14);
+  --hx-glass: rgb(255 255 255 / 0.18);
+  --hx-glass-strong: rgb(255 255 255 / 0.42);
+  --hx-glass-dialog: rgb(255 255 255 / 0.36);
+  --hx-glass-border: rgb(255 255 255 / 0.55);
+  --hx-glass-sheen: none;
+  --hx-glass-hover: rgb(255 255 255 / 0.4);
+  --hx-glass-active: rgb(255 255 255 / 0.5);
+  --hx-glass-raised: rgb(255 255 255 / 0.45);
+  --hx-glass-field: rgb(255 255 255 / 0.32);
 }
 
 /* Expose the semantic tokens as Tailwind colors: hx:bg-primary, hx:text-fg-muted… */
@@ -501,7 +531,7 @@
   --hx-tint-active: rgb(255 255 255 / 0.16);
   --hx-glass-highlight: rgb(255 255 255 / 0.28);
   --hx-liquid-rim: inset 0 0 14px -4px rgb(255 255 255 / 0.3);
-  --hx-liquid-dim: brightness(var(--hx-clear-dim));
+  --hx-liquid-dim: contrast(var(--hx-clear-flatten)) brightness(var(--hx-clear-dim));
   color: var(--hx-fg);
   text-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
   background-color: var(--hx-glass-clear);
@@ -511,7 +541,8 @@
   box-shadow:
     inset 0 1px 0 0 var(--hx-glass-highlight),
     var(--hx-glass-shadow);
-  --hx-glass-filter: blur(calc(var(--hx-glass-blur) * 0.5)) saturate(180%) brightness(var(--hx-clear-dim));
+  --hx-glass-filter: blur(calc(var(--hx-glass-blur) * 0.5)) saturate(180%) contrast(var(--hx-clear-flatten))
+    brightness(var(--hx-clear-dim));
 }
 
 /* Tinted glass: colored glass for filled actions (primary by default).
@@ -713,7 +744,9 @@
   }
 
   /* Clear mode: every surface darkens what is behind it, except one already sitting in a darkened surface. */
-  :where([data-liquid='clear'])
+  :where(
+      :is([data-liquid='clear'], [data-liquid='clear-auto']:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image)))
+    )
     :where(
       .hx\:glass-thin,
       .hx\:glass,
@@ -724,11 +757,13 @@
       .hx\:glass-ring,
       .hx\:glass-field
     ) {
-    --hx-liquid-dim: brightness(var(--hx-clear-dim));
-    text-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+    --hx-liquid-dim: var(--hx-clear-tone);
+    text-shadow: var(--hx-clear-text-shadow);
   }
 
-  :where([data-liquid='clear'])
+  :where(
+      :is([data-liquid='clear'], [data-liquid='clear-auto']:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image)))
+    )
     :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog, .hx\:glass-clear)
     :where(
       .hx\:glass-thin,
@@ -741,6 +776,16 @@
       .hx\:glass-field
     ) {
     --hx-liquid-dim: initial;
+  }
+
+  /* Toasts pile up: if each evened out what is behind it, the front one would sit on a solid stack. They are
+     smoked (or milky) glass instead, which also keeps them readable on any page. */
+  :where(
+      :is([data-liquid='clear'], [data-liquid='clear-auto']:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image)))
+    )
+    .hx-toast {
+    --hx-liquid-dim: initial;
+    --hx-glass-dialog: var(--hx-toast-pane);
   }
 
   :where([data-liquid]) .hx-toast {

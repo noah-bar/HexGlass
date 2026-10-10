@@ -252,16 +252,38 @@ function run(mode: string) {
   };
 }
 
+export type LiquidGlassMode = {
+  /**
+   * Clear glass everywhere: nearly transparent panes that darken what is behind them, with white text in both
+   * themes. `'auto'` only does so where it reads well, in the dark theme or over a `Backdrop` image, and keeps
+   * the regular liquid glass on a plain light page.
+   */
+  clear?: boolean | 'auto';
+};
+
+function attribute(clear: LiquidGlassMode['clear']) {
+  return clear === 'auto' ? 'clear-auto' : clear ? 'clear' : '';
+}
+
+/**
+ * Turns liquid glass on before the first paint, so a server-rendered page does not show frosted glass until
+ * the component mounts. Render it in `<head>` with the same options as the component:
+ * `<script dangerouslySetInnerHTML={{ __html: liquidGlassScript({ clear: 'auto' }) }} />`.
+ */
+export function liquidGlassScript({ clear = false }: LiquidGlassMode = {}) {
+  return `(function(){if(!matchMedia('(prefers-reduced-transparency: reduce)').matches)document.documentElement.setAttribute('data-liquid',${JSON.stringify(attribute(clear))})})()`;
+}
+
 let users = 0;
 let stop: (() => void) | undefined;
 
 /**
  * Turns every glass surface of the document into liquid glass and keeps doing so as surfaces appear, move
- * and resize; `clear` also makes them all clear panes with white text. Returns a function that undoes it;
+ * and resize; `clear` also makes them all clear panes with white text (see `LiquidGlassMode`). Returns a function that undoes it;
  * nested calls share the engine of the first one.
  */
-export function startLiquidGlass({ clear = false }: { clear?: boolean } = {}): () => void {
-  if (users++ === 0) stop = run(clear ? 'clear' : '');
+export function startLiquidGlass({ clear = false }: LiquidGlassMode = {}): () => void {
+  if (users++ === 0) stop = run(attribute(clear));
   return () => {
     if (--users === 0) stop?.();
   };
