@@ -147,9 +147,9 @@
   --hx-liquid-bend: 30px;
   --hx-liquid-fringe: 0;
   --hx-liquid-blur: 8px;
-  /* Clear liquid glass: how a pane evens out what is behind it so text holds over anything. Light theme: lift
-     dark areas far more than bright ones, into a pale wash dark text holds on. */
-  --hx-clear-tone: contrast(0.35) brightness(1.6);
+  /* How a pane evens out what is behind it once it has something to show through (see "Panes over a picture").
+     Light theme: lift dark areas far more than bright ones, into a pale wash dark text holds on. */
+  --hx-pane-tone: contrast(0.35) brightness(1.6);
   --hx-liquid-rim: inset 0 0 14px -4px rgb(255 255 255 / 0.7);
 
   /* Backdrop: page base + three glows (indigo, cyan, soft violet). */
@@ -262,9 +262,9 @@
   --hx-glass-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.06), rgb(255 255 255 / 0) 45%);
   --hx-liquid-blur: 6px;
   /* Dark theme: flatten, then darken, so bright areas come down far more than dark ones. */
-  --hx-clear-tone: contrast(var(--hx-clear-flatten)) brightness(var(--hx-clear-dim));
-  --hx-clear-dim: 0.7;
-  --hx-clear-flatten: 0.75;
+  --hx-pane-tone: contrast(var(--hx-pane-flatten)) brightness(var(--hx-pane-dim));
+  --hx-pane-dim: 0.7;
+  --hx-pane-flatten: 0.75;
   --hx-liquid-rim: inset 0 0 14px -4px rgb(255 255 255 / 0.16);
 
   --hx-backdrop-base: #0c0c0c;
@@ -281,8 +281,7 @@
    as the other panes. */
 :root {
   --hx-pagination-radius: 9999px;
-  /* Checked switches, checkboxes and radios (see glass-tint). --hx-tint-tone is how clear mode evens out what
-     is behind them. */
+  /* Checked controls and bars (see glass-tint). --hx-tint-tone is how they darken what is behind them. */
   --hx-tint-density: 60%;
   --hx-tint-sheen: linear-gradient(180deg, transparent, rgb(0 0 0 / 0.16));
   --hx-tint-frame: 55%;
@@ -295,15 +294,15 @@
 }
 
 /* ---------------------------------------------------------------------------
- * Clear glass: in the dark theme, or over a Backdrop image, every surface is a nearly transparent pane and
+ * Panes over a picture: in the dark theme, or over a Backdrop image, every surface is a nearly transparent pane and
  * surfaces only differ by how thick their veil is. Text must stay readable over anything, so the pane evens out
  * what is behind it, toward the side the theme writes on: the dark theme darkens it and writes in white, the
  * light theme lightens it and writes in dark. A plain light page has nothing to show through and keeps the
  * regular veils.
  * ------------------------------------------------------------------------- */
 :root:is(.dark, [data-theme='dark']) {
-  --hx-clear-text-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
-  --hx-tint-tone: var(--hx-clear-tone);
+  --hx-pane-text-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+  --hx-tint-tone: var(--hx-pane-tone);
   --hx-fg: #ffffff;
   --hx-fg-muted: rgb(255 255 255 / 0.82);
   --hx-fg-subtle: rgb(255 255 255 / 0.72);
@@ -338,9 +337,9 @@
   --hx-danger-text: #fecaca;
 }
 
-/* Light theme: no dark veil, the panes lighten what is behind them (see --hx-clear-tone). */
+/* Light theme over a Backdrop image: no dark veil, the panes lighten what is behind them (see --hx-pane-tone). */
 :root:has(.hx-backdrop-image):not(.dark, [data-theme='dark']) {
-  --hx-clear-text-shadow: none;
+  --hx-pane-text-shadow: none;
   /* A cool veil rather than a white one: over a pale sky the lightened pane would otherwise be pure white. */
   --hx-glass-thin: rgb(226 232 245 / 0.2);
   --hx-glass: rgb(226 232 245 / 0.24);
@@ -360,7 +359,7 @@
   --hx-liquid-rim: inset 0 0 14px -4px rgb(255 255 255 / 0.8), inset 0 -12px 16px -14px rgb(15 23 42 / 0.22);
   --hx-glass-shadow: 0 1px 2px rgb(15 23 42 / 0.1), 0 12px 32px -8px rgb(15 23 42 / 0.24);
   --hx-glass-shadow-lg: 0 2px 6px rgb(15 23 42 / 0.1), 0 30px 60px -14px rgb(15 23 42 / 0.36);
-  /* Secondary and colored text: a shade darker than on frosted glass, for the darkest parts of a photo. */
+  /* Secondary and colored text: a shade darker than on a plain page, for the darkest parts of a photo. */
   --hx-fg-muted: #3a4150;
   --hx-fg-subtle: #555c6b;
   --hx-success-text: #14532d;
@@ -531,11 +530,11 @@
   --hx-liquid-frost: 3;
 }
 
-/* Tinted glass: the checked state of switches, checkboxes and radios. A dense colored pane by default
-   (white marks must stay ≥ 4.5:1 on any backdrop: do not go below 85% without darkening what is behind).
-   Under liquid glass (--hx-tint-* tokens) it is a thinner pane the page shows through, denser at the bottom,
-   with a colored frame and a recessed top; clear mode darkens what is behind it so the state still reads
-   at a glance. Set --hx-tint-fill / --hx-tint-fill-hover to change the color. */
+/* Tinted glass: checked switches, checkboxes and radios, and the filled part of sliders and progress bars.
+   A colored pane the page shows through (--hx-tint-density), denser at the bottom, with a frame in its own
+   color and a recessed top. It darkens what is behind it (--hx-tint-tone), so the state reads at a glance and
+   a white mark stays ≥ 4.5:1 on any backdrop. Set --hx-tint-fill / --hx-tint-fill-hover to change the color.
+   The fallbacks are the dense pane used when the tokens are unset. */
 @utility glass-tint {
   background-color: color-mix(
     in oklch,
@@ -570,9 +569,9 @@
   }
 }
 
-/* Stained glass: a translucent colored pane with a frosted finish — think of a stained glass
-   block. Vertical gradient (light comes through the top), lit edge over a colored frame, bright
-   top rim, fine grain, heavy blur that boosts the colors behind, no glow.
+/* Stained glass (primary and danger buttons): a dense colored pane with white text. Vertical gradient
+   (light comes through the top), lit edge in the pane's color over a colored frame, fine grain, no glow. It
+   darkens what is behind it (--hx-stain-tone), so the white text holds on any page.
    Set --hx-stain (pane color) and --hx-stain-text to recolor it (see the danger button). */
 @utility glass-stained {
   --hx-stain-lift: var(--hx-stain-extra, 0%);
@@ -631,8 +630,7 @@
   }
 }
 
-/* Ring: an outlined control. Bare on a frosted page; under liquid glass it is a clear pane, so its label
-   never sits on the raw page (with all three values unset the declaration is dropped). */
+/* Ring: an outlined control. A pane of its own, so its label never sits on the raw page. */
 @utility glass-ring {
   -webkit-backdrop-filter: var(--hx-ring-filter,) var(--hx-liquid-dim,) var(--hx-liquid-refraction,);
   backdrop-filter: var(--hx-ring-filter,) var(--hx-liquid-dim,) var(--hx-liquid-refraction,);
@@ -773,11 +771,11 @@
     backdrop-filter: none;
   }
 
-  /* Clear mode: every surface darkens what is behind it, except one already sitting in a darkened surface. */
+  /* Over a picture every surface evens out what is behind it, except one already sitting in such a surface. */
   :where(:root:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image)))
     :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog, .hx\:glass-ring, .hx\:glass-field) {
-    --hx-liquid-dim: var(--hx-clear-tone);
-    text-shadow: var(--hx-clear-text-shadow);
+    --hx-liquid-dim: var(--hx-pane-tone);
+    text-shadow: var(--hx-pane-text-shadow);
   }
 
   :where(:root:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image)))
@@ -1034,12 +1032,12 @@
  * or Windows high-contrast mode → fall back to fully opaque surfaces.
  */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  /* The extra :root raise these above the clear glass tokens. */
+  /* The extra :root raise these above the tokens of panes over a picture. */
   :root,
   :root:root:root:root:not(.dark, [data-theme='dark']),
   [data-theme='light'] {
     --hx-liquid-blur: 0px;
-    --hx-clear-tone: initial;
+    --hx-pane-tone: initial;
     --hx-stain-tone: initial;
     --hx-tint-tone: initial;
     --hx-stain-top: 100%;
@@ -1056,7 +1054,7 @@
   :root:root:root:root:is(.dark, [data-theme='dark']),
   [data-theme='dark'] {
     --hx-liquid-blur: 0px;
-    --hx-clear-tone: initial;
+    --hx-pane-tone: initial;
     --hx-stain-tone: initial;
     --hx-tint-tone: initial;
     --hx-stain-top: 100%;
@@ -1072,12 +1070,12 @@
 }
 
 @media (prefers-reduced-transparency: reduce) {
-  /* The extra :root raise these above the clear glass tokens. */
+  /* The extra :root raise these above the tokens of panes over a picture. */
   :root,
   :root:root:root:root:not(.dark, [data-theme='dark']),
   [data-theme='light'] {
     --hx-liquid-blur: 0px;
-    --hx-clear-tone: initial;
+    --hx-pane-tone: initial;
     --hx-stain-tone: initial;
     --hx-tint-tone: initial;
     --hx-stain-top: 100%;
@@ -1096,7 +1094,7 @@
   :root:root:root:root:is(.dark, [data-theme='dark']),
   [data-theme='dark'] {
     --hx-liquid-blur: 0px;
-    --hx-clear-tone: initial;
+    --hx-pane-tone: initial;
     --hx-stain-tone: initial;
     --hx-tint-tone: initial;
     --hx-stain-top: 100%;

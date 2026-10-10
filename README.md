@@ -557,7 +557,7 @@ The material details can be tuned, and each one is turned off with `none`:
 
 Available tokens: `--hx-fg`, `--hx-fg-muted`, `--hx-fg-subtle`, `--hx-brand`, `--hx-primary(-hover|-fg)`, `--hx-accent`,
 `--hx-danger(-hover|-fg)`, `--hx-danger-solid(-hover)`, `--hx-stain-*`, `--hx-primary-stain(-text)`, `--hx-danger-stain(-text)`, `--hx-ring`, `--hx-glass-thin`, `--hx-glass`, `--hx-glass-strong`,
-`--hx-glass-raised`, `--hx-glass-dialog`, `--hx-glass-field`, `--hx-glass-border`, `--hx-liquid-*`, `--hx-clear-*`,
+`--hx-glass-raised`, `--hx-glass-dialog`, `--hx-glass-field`, `--hx-glass-border`, `--hx-liquid-*`, `--hx-pane-*`,
 `--hx-tint-hover`, `--hx-tint-active`, `--hx-backdrop-*`… The full list, with the light and dark values, is in
 [`src/styles/index.css`](https://github.com/noah-bar/HexUI/blob/main/src/styles/index.css).
 
@@ -614,7 +614,7 @@ Tune it with CSS variables, on the root or on any subtree:
 }
 ```
 
-`--hx-clear-tone` is the filter a clear pane applies to its backdrop (per theme), and `--hx-liquid-rim` the inner
+`--hx-pane-tone` is the filter a pane applies to its backdrop over a picture (per theme), and `--hx-liquid-rim` the inner
 glow of its edge.
 
 The engine watches the document it was loaded in. For another document (an iframe you render into), call
