@@ -159,8 +159,8 @@ function run(): () => void {
   }
 
   function update(element: HTMLElement, surface: Surface, now: number) {
-    // The blur layer covers the padding box.
-    const { clientWidth: width, clientHeight: height } = element;
+    // The blur layer covers the border box.
+    const { offsetWidth: width, offsetHeight: height } = element;
     const resized = surface.width !== width || surface.height !== height;
     if (resized && surface.settledAt > 0) surface.settledAt = now + SETTLE_MS;
     surface.width = width;

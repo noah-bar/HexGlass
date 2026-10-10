@@ -603,13 +603,15 @@
   :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog):not(.hx-toast)::after {
     content: '';
     position: absolute;
-    inset: 0;
+    /* Over the border too: a pane that evens out its backdrop would otherwise leave a raw 1px frame, and its
+       corners would not follow the border's. */
+    inset: -1px;
     z-index: -1;
     border-radius: inherit;
     background-image: var(--hx-glass-grain);
     background-size: 160px 160px;
     box-shadow:
-      inset 0 1px 0 0 var(--hx-glass-highlight),
+      inset 0 2px 0 -1px var(--hx-glass-highlight),
       var(--hx-liquid-rim);
     -webkit-backdrop-filter: var(--hx-glass-filter);
     backdrop-filter: var(--hx-glass-filter);
