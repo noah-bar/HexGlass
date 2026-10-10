@@ -1,6 +1,7 @@
 import { withThemeByClassName } from '@storybook/addon-themes';
 import type { Preview } from '@storybook/react-vite';
 import { Backdrop, type BackdropProps } from '../src/components/backdrop/Backdrop';
+import { LiquidGlass } from '../src/components/liquid-glass/LiquidGlass';
 import './preview.css';
 
 const backdropImage = {
@@ -35,7 +36,8 @@ const preview: Preview = {
     },
   },
   initialGlobals: {
-    backdrop: 'mesh',
+    // Clear liquid glass needs a picture behind it: on a plain light page it turns flat gray.
+    backdrop: 'image',
   },
   decorators: [
     (Story, { globals, parameters, viewMode }) => {
@@ -49,6 +51,7 @@ const preview: Preview = {
             ) : (
               <Backdrop position="absolute" variant={backdrop} />
             ))}
+          <LiquidGlass clear />
           <Story />
         </div>
       );
