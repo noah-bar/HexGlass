@@ -139,7 +139,7 @@
   );
   --hx-glass-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.2), rgb(255 255 255 / 0) 40%);
   --hx-glass-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
-  /* Liquid glass (see the LiquidGlass component): a light blur so the bent rim stays legible, the glow of the
+  /* Liquid glass: a light blur so the bent rim stays legible, the glow of the
      pane's thickness, the width of the rim, how far it shifts what is behind it and how much it splits colors
      (0 to 1). A surface narrower than two rims bends proportionally less. Splitting colors triples the work of
      every refracting surface, so it is off by default. */
@@ -277,9 +277,9 @@
   color-scheme: dark;
 }
 
-/* Liquid glass, any mode: page buttons of a pagination are circles, and colored and outlined buttons blur as
-   lightly as the other panes. */
-[data-liquid] {
+/* Liquid glass: page buttons of a pagination are circles, and colored and outlined buttons blur as lightly
+   as the other panes. */
+:root {
   --hx-pagination-radius: 9999px;
   /* Checked switches, checkboxes and radios (see glass-tint). --hx-tint-tone is how clear mode evens out what
      is behind them. */
@@ -295,17 +295,13 @@
 }
 
 /* ---------------------------------------------------------------------------
- * Clear liquid glass everywhere (<LiquidGlass clear />): every surface becomes a nearly transparent pane and
+ * Clear glass: in the dark theme, or over a Backdrop image, every surface is a nearly transparent pane and
  * surfaces only differ by how thick their veil is. Text must stay readable over anything, so the pane evens out
  * what is behind it, toward the side the theme writes on: the dark theme darkens it and writes in white, the
- * light theme lightens it and writes in dark.
- * `clear="auto"` only applies in the dark theme or over a Backdrop image: a plain light page has nothing to
- * show through, so it keeps the regular liquid glass.
+ * light theme lightens it and writes in dark. A plain light page has nothing to show through and keeps the
+ * regular veils.
  * ------------------------------------------------------------------------- */
-:is([data-liquid='clear'], [data-liquid='clear-auto']:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image))):is(
-  .dark,
-  [data-theme='dark']
-) {
+:root:is(.dark, [data-theme='dark']) {
   --hx-clear-text-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
   --hx-tint-tone: var(--hx-clear-tone);
   --hx-fg: #ffffff;
@@ -343,10 +339,7 @@
 }
 
 /* Light theme: no dark veil, the panes lighten what is behind them (see --hx-clear-tone). */
-:is([data-liquid='clear'], [data-liquid='clear-auto']:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image))):not(
-  .dark,
-  [data-theme='dark']
-) {
+:root:has(.hx-backdrop-image):not(.dark, [data-theme='dark']) {
   --hx-clear-text-shadow: none;
   /* A cool veil rather than a white one: over a pale sky the lightened pane would otherwise be pure white. */
   --hx-glass-thin: rgb(226 232 245 / 0.2);
@@ -722,12 +715,11 @@
     pointer-events: none;
   }
 
-  /* Liquid glass (html[data-liquid], set by the LiquidGlass component): blur layers blur less and bend what is
-     behind them along the rim, like a thick pane. The refraction is an SVG filter the component draws for each
-     surface; only Chromium runs one in backdrop-filter, so elsewhere the variable stays unset and surfaces are
-     simply a clearer frosted glass. */
-  :where([data-liquid])
-    :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog):not(.hx-toast)::after {
+  /* Liquid glass: blur layers blur lightly and bend what is behind them along the rim, like a thick pane. The
+     refraction is an SVG filter the library draws for each surface (see lib/liquid-glass/engine); only Chromium
+     runs one in backdrop-filter, so elsewhere the variable stays unset and surfaces are the same panes without
+     the bent rim. */
+  :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog):not(.hx-toast)::after {
     --hx-liquid-refraction: inherit;
     --hx-liquid-dim: inherit;
     --hx-liquid-frost: inherit;
@@ -759,13 +751,12 @@
     backdrop-filter: var(--hx-glass-filter);
   }
 
-  :where([data-liquid])
-    :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog):where(
-      [data-open],
-      [data-closed],
-      [data-starting-style],
-      [data-ending-style]
-    ) {
+  :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog):where(
+    [data-open],
+    [data-closed],
+    [data-starting-style],
+    [data-ending-style]
+  ) {
     -webkit-backdrop-filter: blur(calc(var(--hx-liquid-blur) * var(--hx-liquid-frost, 1))) saturate(180%)
       var(--hx-liquid-dim,) var(--hx-liquid-refraction,);
     backdrop-filter: blur(calc(var(--hx-liquid-blur) * var(--hx-liquid-frost, 1))) saturate(180%) var(--hx-liquid-dim,)
@@ -783,17 +774,13 @@
   }
 
   /* Clear mode: every surface darkens what is behind it, except one already sitting in a darkened surface. */
-  :where(
-      :is([data-liquid='clear'], [data-liquid='clear-auto']:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image)))
-    )
+  :where(:root:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image)))
     :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog, .hx\:glass-ring, .hx\:glass-field) {
     --hx-liquid-dim: var(--hx-clear-tone);
     text-shadow: var(--hx-clear-text-shadow);
   }
 
-  :where(
-      :is([data-liquid='clear'], [data-liquid='clear-auto']:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image)))
-    )
+  :where(:root:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image)))
     :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog)
     :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog, .hx\:glass-ring, .hx\:glass-field) {
     --hx-liquid-dim: initial;
@@ -801,16 +788,14 @@
 
   /* Toasts pile up: if each evened out what is behind it, the front one would sit on a solid stack. Only the
      front toast does, and all of them once the stack is fanned out and they no longer overlap. */
-  :where(
-      :is([data-liquid='clear'], [data-liquid='clear-auto']:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image)))
-    )
+  :where(:root:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image)))
     .hx-toast:has(> .hx-toast-content[data-behind]):not([data-expanded]) {
     --hx-liquid-dim: initial;
   }
 
   /* A toast is a small note over the page, not a dialog: the standard veil and a light frost, so the page
      still shows through it. */
-  :where([data-liquid]) .hx-toast {
+  .hx-toast {
     --hx-liquid-frost: 1.5;
     --hx-glass-dialog: var(--hx-glass);
     -webkit-backdrop-filter: blur(calc(var(--hx-liquid-blur) * var(--hx-liquid-frost, 1))) saturate(180%)
@@ -1049,8 +1034,17 @@
  * or Windows high-contrast mode → fall back to fully opaque surfaces.
  */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  /* The extra :root raise these above the clear glass tokens. */
   :root,
+  :root:root:root:root:not(.dark, [data-theme='dark']),
   [data-theme='light'] {
+    --hx-liquid-blur: 0px;
+    --hx-clear-tone: initial;
+    --hx-stain-tone: initial;
+    --hx-tint-tone: initial;
+    --hx-stain-top: 100%;
+    --hx-stain-bottom: 100%;
+    --hx-tint-density: 100%;
     --hx-glass-thin: #ffffff;
     --hx-glass: #ffffff;
     --hx-glass-strong: #ffffff;
@@ -1059,7 +1053,15 @@
     --hx-glass-field: #ffffff;
   }
   .dark,
+  :root:root:root:root:is(.dark, [data-theme='dark']),
   [data-theme='dark'] {
+    --hx-liquid-blur: 0px;
+    --hx-clear-tone: initial;
+    --hx-stain-tone: initial;
+    --hx-tint-tone: initial;
+    --hx-stain-top: 100%;
+    --hx-stain-bottom: 100%;
+    --hx-tint-density: 100%;
     --hx-glass-thin: #1a1a1a;
     --hx-glass: #141414;
     --hx-glass-strong: #171717;
@@ -1070,8 +1072,17 @@
 }
 
 @media (prefers-reduced-transparency: reduce) {
+  /* The extra :root raise these above the clear glass tokens. */
   :root,
+  :root:root:root:root:not(.dark, [data-theme='dark']),
   [data-theme='light'] {
+    --hx-liquid-blur: 0px;
+    --hx-clear-tone: initial;
+    --hx-stain-tone: initial;
+    --hx-tint-tone: initial;
+    --hx-stain-top: 100%;
+    --hx-stain-bottom: 100%;
+    --hx-tint-density: 100%;
     --hx-glass: #ffffff;
     --hx-glass-strong: #ffffff;
     --hx-glass-dialog: #ffffff;
@@ -1082,7 +1093,15 @@
     --hx-glass-grain: none;
   }
   .dark,
+  :root:root:root:root:is(.dark, [data-theme='dark']),
   [data-theme='dark'] {
+    --hx-liquid-blur: 0px;
+    --hx-clear-tone: initial;
+    --hx-stain-tone: initial;
+    --hx-tint-tone: initial;
+    --hx-stain-top: 100%;
+    --hx-stain-bottom: 100%;
+    --hx-tint-density: 100%;
     --hx-glass: #141414;
     --hx-glass-strong: #171717;
     --hx-glass-dialog: #171717;

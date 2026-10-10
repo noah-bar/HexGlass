@@ -78,12 +78,10 @@ function createFilter(id: string, href: string, width: number, height: number, s
   return filter;
 }
 
-function run(mode: string) {
+function run() {
   const root = document.documentElement;
-  // The stylesheet falls back to opaque surfaces here: keep them as they are.
-  if (window.matchMedia('(prefers-reduced-transparency: reduce)').matches) return () => {};
-  root.setAttribute('data-liquid', mode);
-  if (!supportsRefraction()) return () => root.removeAttribute('data-liquid');
+  // The stylesheet falls back to opaque surfaces here, and only Chromium can refract: nothing to draw.
+  if (window.matchMedia('(prefers-reduced-transparency: reduce)').matches || !supportsRefraction()) return () => {};
 
   const defs = svg('svg', { 'aria-hidden': 'true', width: 0, height: 0 });
   defs.style.cssText = 'position:fixed;pointer-events:none';
@@ -248,43 +246,27 @@ function run(mode: string) {
     resizes.disconnect();
     for (const element of surfaces.keys()) element.style.removeProperty(REFRACTION);
     defs.remove();
-    root.removeAttribute('data-liquid');
   };
-}
-
-export type LiquidGlassMode = {
-  /**
-   * Clear glass everywhere: nearly transparent panes that darken what is behind them, with white text in both
-   * themes. `'auto'` only does so where it reads well, in the dark theme or over a `Backdrop` image, and keeps
-   * the regular liquid glass on a plain light page.
-   */
-  clear?: boolean | 'auto';
-};
-
-function attribute(clear: LiquidGlassMode['clear']) {
-  return clear === 'auto' ? 'clear-auto' : clear ? 'clear' : '';
-}
-
-/**
- * Turns liquid glass on before the first paint, so a server-rendered page does not show frosted glass until
- * the component mounts. Render it in `<head>` with the same options as the component:
- * `<script dangerouslySetInnerHTML={{ __html: liquidGlassScript({ clear: 'auto' }) }} />`.
- */
-export function liquidGlassScript({ clear = false }: LiquidGlassMode = {}) {
-  return `(function(){if(!matchMedia('(prefers-reduced-transparency: reduce)').matches)document.documentElement.setAttribute('data-liquid',${JSON.stringify(attribute(clear))})})()`;
 }
 
 let users = 0;
 let stop: (() => void) | undefined;
 
 /**
- * Turns every glass surface of the document into liquid glass and keeps doing so as surfaces appear, move
- * and resize; `clear` also makes them all clear panes with white text (see `LiquidGlassMode`). Returns a function that undoes it;
- * nested calls share the engine of the first one.
+ * Draws the refraction of every glass surface of the document and keeps doing so as surfaces appear, move and
+ * resize. The library starts it on import; call it yourself only for a document it did not load in.
+ * Returns a function that undoes it; nested calls share one engine.
  */
-export function startLiquidGlass({ clear = false }: LiquidGlassMode = {}): () => void {
-  if (users++ === 0) stop = run(attribute(clear));
+export function startLiquidGlass(): () => void {
+  if (users++ === 0) stop = run();
   return () => {
     if (--users === 0) stop?.();
   };
+}
+
+/** Starts the engine once the document can hold its filters. Does nothing on a server. */
+export function startLiquidGlassWhenReady() {
+  if (typeof document === 'undefined') return;
+  if (document.body) startLiquidGlass();
+  else document.addEventListener('DOMContentLoaded', () => startLiquidGlass(), { once: true });
 }

@@ -1,6 +1,11 @@
 import './styles/index.css';
+import { startLiquidGlassWhenReady } from './lib/liquid-glass/engine';
+
+// Liquid glass is the library's material: the refraction of its surfaces starts with the library.
+startLiquidGlassWhenReady();
 
 export { cn } from './lib/cn';
+export { startLiquidGlass } from './lib/liquid-glass/engine';
 export { useDebouncedValue } from './hooks/useDebouncedValue';
 export { useMediaQuery } from './hooks/useMediaQuery';
 export { themeScript, useTheme, type ResolvedTheme, type Theme, type UseThemeResult } from './hooks/useTheme';
@@ -139,8 +144,6 @@ export {
 export { Input, type InputProps } from './components/input/Input';
 export { InputNumber, type InputNumberProps } from './components/input-number/InputNumber';
 export { Label } from './components/label/Label';
-export { LiquidGlass, type LiquidGlassProps } from './components/liquid-glass/LiquidGlass';
-export { liquidGlassScript } from './lib/liquid-glass/engine';
 export {
   Menu,
   MenuCheckboxItem,

@@ -27,7 +27,8 @@
     "url": "https://github.com/noah-bar/HexUI/issues"
   },
   "sideEffects": [
-    "**/*.css"
+    "**/*.css",
+    "./dist/index.js"
   ],
   "files": [
     "dist"
