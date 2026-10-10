@@ -298,7 +298,6 @@
   [data-theme='dark']
 ) {
   --hx-clear-text-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
-  --hx-toast-pane: rgb(18 20 26 / 0.62);
   --hx-fg: #ffffff;
   --hx-fg-muted: rgb(255 255 255 / 0.82);
   --hx-fg-subtle: rgb(255 255 255 / 0.72);
@@ -345,7 +344,6 @@
   [data-theme='dark']
 ) {
   --hx-clear-text-shadow: none;
-  --hx-toast-pane: rgb(255 255 255 / 0.72);
   /* A cool veil rather than a white one: over a pale sky the lightened pane would otherwise be pure white. */
   --hx-glass-thin: rgb(226 232 245 / 0.2);
   --hx-glass: rgb(226 232 245 / 0.24);
@@ -776,17 +774,20 @@
     --hx-liquid-dim: var(--hx-stain-tone);
   }
 
-  /* Toasts pile up: if each evened out what is behind it, the front one would sit on a solid stack. They are
-     smoked (or milky) glass instead, which also keeps them readable on any page. */
+  /* Toasts pile up: if each evened out what is behind it, the front one would sit on a solid stack. Only the
+     front toast does, and all of them once the stack is fanned out and they no longer overlap. */
   :where(
       :is([data-liquid='clear'], [data-liquid='clear-auto']:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image)))
     )
-    .hx-toast {
+    .hx-toast:has(> .hx-toast-content[data-behind]):not([data-expanded]) {
     --hx-liquid-dim: initial;
-    --hx-glass-dialog: var(--hx-toast-pane);
   }
 
+  /* A toast is a small note over the page, not a dialog: the standard veil and a light frost, so the page
+     still shows through it. */
   :where([data-liquid]) .hx-toast {
+    --hx-liquid-frost: 1.5;
+    --hx-glass-dialog: var(--hx-glass);
     -webkit-backdrop-filter: blur(calc(var(--hx-liquid-blur) * var(--hx-liquid-frost, 1))) saturate(180%)
       var(--hx-liquid-dim,) var(--hx-liquid-refraction,);
     backdrop-filter: blur(calc(var(--hx-liquid-blur) * var(--hx-liquid-frost, 1))) saturate(180%) var(--hx-liquid-dim,)
