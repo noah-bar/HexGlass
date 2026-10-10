@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Liquid glass as the library's material: surfaces are lightly blurred panes whose rim bends what is behind them. The refraction is an SVG displacement filter drawn for each surface, started with the library and shown in Chromium browsers.
+- Clear glass in the dark theme and over a `Backdrop` image: every surface becomes a nearly transparent pane that evens out its own backdrop, darker under white text in the dark theme and lighter under dark text in the light theme.
+- `--hx-liquid-blur`, `--hx-liquid-bezel`, `--hx-liquid-bend`, `--hx-liquid-fringe`, `--hx-liquid-rim` and `--hx-clear-tone` tokens to tune the material.
+- `startLiquidGlass()` to draw the refraction in another document.
+- `--hx-tint-density`, `--hx-tint-frame`, `--hx-tint-glow`, `--hx-tint-sheen`, `--hx-tint-shadow` and `--hx-tint-filter` tokens for tinted glass, and `--hx-stain-tone` for stained glass.
+
+### Changed
+
+- Primary and danger buttons are one dense tinted pane with white text in both themes and on every backdrop, instead of a pale pane with colored text. The pane darkens what is behind it to keep the text readable.
+- Checked switches, checkboxes and radios use a thinner tinted pane with a colored frame and a recessed top, without the white top gloss.
+- The filled range of `Slider` and the bar of `Progress` use the same tinted glass instead of a flat accent color; a complete progress bar stays green.
+- Page buttons of `Pagination` are round.
+- Toasts use the standard surface veil with a light frost instead of the dialog surface.
+- Outline buttons sit on a glass pane instead of the bare page.
+- The `sideEffects` field of the package lists the entry point, which starts the refraction engine.
+
+### Fixed
+
+- `DataTable`: the sticky header keeps the rounded top corners of its container, including its blur.
+- Menus, selects, popovers, dialogs and tooltips show their glass during the opening and closing fade instead of only once it has finished.
+
 ## [0.4.2] - 2026-10-10
 
 ### Chore

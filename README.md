@@ -1,6 +1,6 @@
 # HexUI
 
-**Glassmorphism React components for professional interfaces** — built on [Base UI](https://base-ui.com) and
+**Liquid glass React components for professional interfaces** — built on [Base UI](https://base-ui.com) and
 Tailwind CSS v4, shipped as precompiled CSS.
 
 [![npm version](https://img.shields.io/npm/v/@hxtc/hexui?color=4f46e5)](https://www.npmjs.com/package/@hxtc/hexui)
@@ -14,8 +14,9 @@ Tailwind CSS v4, shipped as precompiled CSS.
 ![A billing screen built with HexUI: glass sidebar, sticky header and invoice table](https://raw.githubusercontent.com/noah-bar/HexUI/main/docs/screenshot.jpg)
 
 - **About 40 components**, from buttons and fields to a data table, a command palette and a full sidebar layout.
-- **Glass that stays readable**: frosted surfaces with a lit edge and a fine grain, text contrast checked in both
-  themes, opaque fallbacks when the browser or the user turns transparency off.
+- **Liquid glass that stays readable**: clear panes with a lit edge, a fine grain and a rim that bends what is
+  behind them. Each pane evens out its own backdrop, so text contrast holds over a photo in both themes. Opaque
+  fallbacks when the browser or the user turns transparency off.
 - **Accessible behavior** from Base UI: keyboard navigation, focus management, ARIA.
 - **No Tailwind required**: the stylesheet is precompiled. If you do use Tailwind, nothing collides: every class is
   prefixed with `hx:` and every variable with `--hx-*`, and no global reset is shipped.
@@ -34,6 +35,7 @@ Tailwind CSS v4, shipped as precompiled CSS.
   [Sidebar](#sidebar) · [Command](#command-palette-command) · [Toast](#notifications-toast) · [Sheet](#side-panel-sheet) ·
   [SafeArea](#mobile-safe-areas-safearea)
 - [Customization](#customization)
+- [Liquid glass](#liquid-glass)
 - [Working with glass](#working-with-glass)
 - [API reference](#api-reference)
 - [Browser support](#browser-support)
@@ -135,7 +137,7 @@ the application's layout.
 - `variant`: `mesh` · `aurora` · `plain` — `intensity`: `subtle` · `medium` — `texture`: `none` · `grain` · `grid`
 - `position="absolute"` confines it to a positioned container (add `isolation: isolate` to that container).
 - It sits at a negative `z-index`: if one of your application's wrappers already has a background color, it will hide it.
-- It is optional: components stay readable without it.
+- It is optional: components stay readable without it. Over a plain page, surfaces are lightly veiled panes.
 - Colors can be customized with `--hx-backdrop-base` and `--hx-backdrop-accent-1` to `-3`. The first accent follows `--hx-brand`.
 
 An image can replace the colored glows, optionally a different one per theme. Only the current theme's image
@@ -151,7 +153,9 @@ is downloaded:
 ```
 
 - `image` and `overlay` accept a single value or `{ light, dark }` (without `dark`, the `light` value is used for both themes).
-- The black veil and the blur help keep text readable over a busy photo. `texture` is still available on top.
+- Over an image, surfaces turn into clear glass and keep their text readable by themselves (see
+  [Liquid glass](#liquid-glass)), so `imageBlur` and `overlay` are a matter of taste. `texture` is still available
+  on top.
 - Framing is set with `--hx-backdrop-image-position` (`center` by default).
 
 ## Light / dark theme
@@ -519,20 +523,20 @@ with it:
 
 ## Customization
 
-The default palette is indigo on neutral grays: cool hues stay luminous once blurred, which suits glass.
+The default palette is indigo on neutral grays: cool hues stay luminous behind glass.
 Three color roles:
 
 | Token          | Value                            | Usage                                                               |
 | -------------- | -------------------------------- | ------------------------------------------------------------------- |
 | `--hx-brand`   | `#6366f1`                        | Decorative: background glows, list hover.                           |
-| `--hx-primary` | `#4f46e5`                        | Filled surfaces with white text (buttons, switch): 6.3:1.           |
+| `--hx-primary` | `#4f46e5`                        | Checked controls and bars (switch, checkbox, slider, progress).     |
 | `--hx-accent`  | `#4f46e5` light / `#818cf8` dark | Brand color on top of a surface: icons, focus borders, check marks. |
 
 Override the CSS variables after importing the styles:
 
 ```css
 :root {
-  --hx-glass-blur: 12px;
+  --hx-liquid-blur: 12px;
 }
 .dark {
   --hx-accent: #a5b4fc;
@@ -545,7 +549,7 @@ The material details can be tuned, and each one is turned off with `none`:
 
 ```css
 :root {
-  --hx-glass-grain: none; /* frosted glass grain */
+  --hx-glass-grain: none; /* fine grain */
   --hx-glass-sheen: none; /* highlight at the top of surfaces */
   --hx-glass-edge: none; /* lit edge */
 }
@@ -553,32 +557,68 @@ The material details can be tuned, and each one is turned off with `none`:
 
 Available tokens: `--hx-fg`, `--hx-fg-muted`, `--hx-fg-subtle`, `--hx-brand`, `--hx-primary(-hover|-fg)`, `--hx-accent`,
 `--hx-danger(-hover|-fg)`, `--hx-danger-solid(-hover)`, `--hx-stain-*`, `--hx-primary-stain(-text)`, `--hx-danger-stain(-text)`, `--hx-ring`, `--hx-glass-thin`, `--hx-glass`, `--hx-glass-strong`,
-`--hx-glass-raised`, `--hx-glass-dialog`, `--hx-glass-field`, `--hx-glass-border`, `--hx-glass-blur`, `--hx-tint-hover`,
-`--hx-tint-active`, `--hx-backdrop-*`… The full list, with the light and dark values, is in
+`--hx-glass-raised`, `--hx-glass-dialog`, `--hx-glass-field`, `--hx-glass-border`, `--hx-liquid-*`, `--hx-clear-*`,
+`--hx-tint-hover`, `--hx-tint-active`, `--hx-backdrop-*`… The full list, with the light and dark values, is in
 [`src/styles/index.css`](https://github.com/noah-bar/HexUI/blob/main/src/styles/index.css).
 
 ### Stained glass (primary and danger buttons)
 
-`glass-stained` is a translucent, frosted colored glass, like a block of stained glass: vertical gradient, fine
-grain, no glow, and a lit border in the glass color (main highlight at the top left and a second reflection at the
-bottom right). The content behind the button is blurred.
-
-- **Light mode**: a pale indigo (or red) glass through which the page stays visible, with dark colored text
-  (`--hx-primary-stain-text`, `--hx-danger-stain-text`, at least 5.4:1 on hover). Danger has a slightly denser glass
-  (`--hx-danger-stain-extra`) so it does not turn gray over the cyan glows. The glass also darkens when pressed.
-- **Dark mode**: the same principle, with a slightly denser tinted glass and light colored text (pale indigo and
-  red, at least 7.2:1 on hover).
+`glass-stained` is a dense colored pane with white text: vertical gradient (lighter at the top, denser at the
+bottom), fine grain, no glow, and a lit border in the glass color. It is the same button in both themes and on
+every page: the pane darkens what is behind it itself, so the white text holds on a pale page (at least 5.3:1
+measured over a bright photo) while the page still shows through.
 
 - Color: `--hx-stain` (glass) and `--hx-stain-text` (text), as the danger button does with `--hx-danger-stain`
   and `--hx-danger-stain-text`.
 - Density: `--hx-stain-top` and `--hx-stain-bottom` (top and bottom of the gradient), `--hx-stain-hover` (added on
-  hover), to be set per theme. If you lower the density, check the text contrast again.
+  hover), to be set per theme. `--hx-stain-tone` is how much the pane darkens its backdrop. If you lower either,
+  check the text contrast again.
 
-### Tinted glass (switch, checkbox, radio)
+### Tinted glass (checked controls and bars)
 
-`glass-tint` is an almost solid colored glass, for checked controls. It uses `--hx-primary` by default.
-Change the color with `--hx-tint-fill` and `--hx-tint-fill-hover`. The fill stays at 85% minimum and the color
-must keep at least 4.5:1 with white text.
+`glass-tint` is the colored glass of a checked switch, checkbox or radio, and of the filled part of a slider or a
+progress bar: a pane at 60%, denser at the bottom, with a frame in its own color and a recessed top. Like the
+buttons it darkens what is behind it, so the state reads at a glance on any page. It uses `--hx-primary` by
+default.
+
+- Color: `--hx-tint-fill` and `--hx-tint-fill-hover` (a complete progress bar sets them to `--hx-success`). The
+  frame and the colored shadow follow.
+- Density and frame: `--hx-tint-density`, `--hx-tint-frame`, `--hx-tint-glow`. Keep at least 4.5:1 between the
+  pane and its white mark.
+
+## Liquid glass
+
+Liquid glass is the library's material: there is nothing to turn on.
+
+- **Panes, not frost.** Surfaces blur what is behind them only lightly (`--hx-liquid-blur`), and their rim bends
+  it like the rounded edge of a thick piece of glass. Dialogs, sheets and the command palette keep a stronger
+  frost, so what is behind them is never readable.
+- **Clear glass over a picture.** In the dark theme, or over a `Backdrop` image, every surface becomes a nearly
+  transparent pane and surfaces only differ by how thick their veil is. To keep text readable over anything, each
+  pane evens out its own backdrop, toward the side the theme writes on: the dark theme darkens it and writes in
+  white, the light theme lightens it and writes in dark. A plain light page has nothing to show through and
+  keeps the regular veils.
+- **Refraction** is drawn by a small engine that starts with the library. It gives each surface an SVG
+  displacement filter at its own size and corner radius, shares filters between surfaces of the same shape, and
+  pauses on a surface while it resizes. Only Chromium browsers run such a filter in `backdrop-filter`: elsewhere
+  surfaces are the same panes without the bent rim.
+
+Tune it with CSS variables, on the root or on any subtree:
+
+```css
+:root {
+  --hx-liquid-blur: 8px; /* blur of a pane (6px in the dark theme) */
+  --hx-liquid-bezel: 28px; /* width of the refracting rim */
+  --hx-liquid-bend: 30px; /* how far the rim shifts what is behind it; 0 keeps a surface flat */
+  --hx-liquid-fringe: 0; /* color fringing in the rim, 0 to 1: triples the work of each surface */
+}
+```
+
+`--hx-clear-tone` is the filter a clear pane applies to its backdrop (per theme), and `--hx-liquid-rim` the inner
+glow of its edge.
+
+The engine watches the document it was loaded in. For another document (an iframe you render into), call
+`startLiquidGlass()` there; it returns a function that stops it.
 
 ## Working with glass
 
@@ -598,6 +638,10 @@ by an `::after` pseudo-element placed behind their content, set by `--hx-glass-f
 placed inside (sticky header, floating bar, button) does blur the surface's content. In Chrome, an element that has
 a `backdrop-filter` itself prevents its children from blurring what it contains.
 So do not use `::after` on a glass surface, nor a negative `z-index` inside it: the blur would cover it.
+
+Popups (menus, selects, popovers, dialogs, tooltips) and toasts are the exception: they fade in, and a fading
+element hides the page from its children's blur, so they carry the filter themselves. A blurred element placed
+inside one only blurs the popup's own tint.
 
 ### Scrolling inside a glass surface
 
@@ -716,13 +760,14 @@ Each entry lists the exports of a component and its main options. Props not list
   item.
 - **Tooltip** — `TooltipProvider`, `Tooltip`, `TooltipTrigger`, `TooltipContent`.
 - **Hooks and utilities** — `useTheme`, `themeScript`, `useMediaQuery(query)`, `useDebouncedValue(value, delay)`
-  (300 ms by default), `cn(...classes)`.
+  (300 ms by default), `cn(...classes)`, `startLiquidGlass()` (see [Liquid glass](#liquid-glass)).
 
 ## Browser support
 
-HexUI targets current versions of Chrome, Edge, Firefox and Safari. Glass surfaces become opaque automatically
-when the browser does not support `backdrop-filter`, when the user turns on "Reduce transparency", and in
-forced-colors (high contrast) mode. Animations are reduced when the user asks for reduced motion.
+HexUI targets current versions of Chrome, Edge, Firefox and Safari. The refraction of the rim only shows in
+Chromium browsers (Chrome, Edge, Brave…); Firefox and Safari render the same panes without it. Glass surfaces
+become opaque automatically when the browser does not support `backdrop-filter`, when the user turns on "Reduce
+transparency", and in forced-colors (high contrast) mode. Animations are reduced when the user asks for reduced motion.
 
 ## Contributing
 
