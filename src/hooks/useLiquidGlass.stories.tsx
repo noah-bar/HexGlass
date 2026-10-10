@@ -67,7 +67,8 @@ export const Default: Story = {
           </div>
         ))}
       </div>
-      <div className="hx:absolute hx:inset-6 hx:grid hx:content-center hx:gap-4 hx:sm:grid-cols-2">
+      {/* Inset so the panels' edges fall inside the cards, not along their edges. */}
+      <div className="hx:absolute hx:inset-x-16 hx:inset-y-6 hx:grid hx:content-center hx:gap-10 hx:sm:grid-cols-2">
         <Panel className="hx:p-5">
           <GlassSettings />
         </Panel>
