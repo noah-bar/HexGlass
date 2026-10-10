@@ -277,12 +277,10 @@
   color-scheme: dark;
 }
 
-/* Liquid glass, any mode: controls are capsules, the shape whose rim bends evenly all the way round, and
-   colored and outlined buttons blur as lightly as the other panes. */
+/* Liquid glass, any mode: page buttons of a pagination are circles, and colored and outlined buttons blur as
+   lightly as the other panes. */
 [data-liquid] {
-  --hx-button-radius: 9999px;
-  /* A capsule for one-line fields, a soft corner for taller ones (text areas, chip lists). */
-  --hx-field-radius: 1.125rem;
+  --hx-pagination-radius: 9999px;
   --hx-stain-blur: var(--hx-liquid-blur);
   --hx-ring-filter: blur(var(--hx-liquid-blur)) saturate(180%);
 }

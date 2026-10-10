@@ -75,7 +75,7 @@ export function ComboboxChips<Item>({
                 <BaseCombobox.Chip
                   key={`${index}-${label}`}
                   className={[
-                    'hx:inline-flex hx:h-6 hx:max-w-full hx:items-center hx:gap-0.5 hx:rounded-(--hx-field-radius,var(--hx-radius-sm)) hx:pr-0.5 hx:pl-2',
+                    'hx:inline-flex hx:h-6 hx:max-w-full hx:items-center hx:gap-0.5 hx:rounded hx:pr-0.5 hx:pl-2',
                     'hx:border hx:border-glass-border hx:bg-tint-active hx:text-xs hx:font-medium hx:text-fg',
                     'hx:outline-none hx:cursor-default hx:focus-within:bg-brand/20 hx:data-highlighted:bg-brand/20',
                   ].join(' ')}
@@ -84,7 +84,7 @@ export function ComboboxChips<Item>({
                   <BaseCombobox.ChipRemove
                     aria-label={removeLabel(label)}
                     className={[
-                      'hx:flex hx:size-5 hx:shrink-0 hx:items-center hx:justify-center hx:rounded-(--hx-field-radius,var(--hx-radius-sm)) hx:cursor-pointer',
+                      'hx:flex hx:size-5 hx:shrink-0 hx:items-center hx:justify-center hx:rounded-sm hx:cursor-pointer',
                       'hx:text-fg-muted hx:hover:bg-tint-active hx:hover:text-fg hx:[&_svg]:size-3',
                     ].join(' ')}
                   >
