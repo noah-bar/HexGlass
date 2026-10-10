@@ -29,9 +29,6 @@ export function getVisiblePages(current: number, totalPages: number, maxVisible 
   return pages;
 }
 
-/* Liquid glass turns page buttons into circles (see --hx-pagination-radius). */
-const round = 'hx:rounded-(--hx-pagination-radius,var(--hx-radius-md))';
-
 export function Pagination({
   page,
   totalPages,
@@ -49,7 +46,7 @@ export function Pagination({
       <Button
         variant="ghost"
         size="icon"
-        className={cn('hx:size-8', round)}
+        className="hx:size-8 hx:rounded-full"
         aria-label={previousLabel}
         disabled={page <= 1}
         onClick={() => onPageChange(page - 1)}
@@ -66,7 +63,7 @@ export function Pagination({
             key={p}
             variant={p === page ? 'secondary' : 'ghost'}
             size="sm"
-            className={cn('hx:min-w-8 hx:px-2 hx:tabular-nums', round)}
+            className="hx:min-w-8 hx:rounded-full hx:px-2 hx:tabular-nums"
             aria-label={pageLabel(p)}
             aria-current={p === page ? 'page' : undefined}
             onClick={() => onPageChange(p)}
@@ -78,7 +75,7 @@ export function Pagination({
       <Button
         variant="ghost"
         size="icon"
-        className={cn('hx:size-8', round)}
+        className="hx:size-8 hx:rounded-full"
         aria-label={nextLabel}
         disabled={page >= totalPages}
         onClick={() => onPageChange(page + 1)}

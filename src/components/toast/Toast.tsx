@@ -29,7 +29,7 @@ export function ToastProvider({ children, closeLabel = 'Close', ...props }: Toas
 function ToastList({ closeLabel }: { closeLabel: string }) {
   const { toasts } = useToast();
   return toasts.map((toast) => (
-    <BaseToast.Root key={toast.id} toast={toast} className="hx-toast hx:glass-dialog hx:rounded-lg hx:text-fg">
+    <BaseToast.Root key={toast.id} toast={toast} className="hx-toast hx:glass-strong hx:rounded-lg hx:text-fg">
       <BaseToast.Content className="hx-toast-content hx:flex hx:items-start hx:gap-3 hx:overflow-hidden hx:p-3.5">
         {toast.type && toastIcons[toast.type as ToastType]}
         <div className="hx:flex hx:min-w-0 hx:flex-1 hx:flex-col hx:gap-0.5">

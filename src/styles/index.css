@@ -19,12 +19,7 @@
 @custom-variant error (&:is([aria-invalid='true'], [data-invalid]));
 
 /* ---------------------------------------------------------------------------
- * Brand palette — indigo on neutral grays.
- * Cool hues stay luminous once blurred, which suits glass surfaces.
- * ------------------------------------------------------------------------- */
-
-/* ---------------------------------------------------------------------------
- * Semantic tokens — light
+ * Semantic tokens — light. Indigo on neutral grays: cool hues stay luminous behind glass.
  * ------------------------------------------------------------------------- */
 :root,
 [data-theme='light'] {
@@ -35,7 +30,7 @@
 
   /* Decorative brand color: glows, illustrations. */
   --hx-brand: #6366f1;
-  /* Filled surfaces with white text: buttons, switches (6.3:1). */
+  /* Checked controls and bars: switch, checkbox, radio, slider, progress. */
   --hx-primary: #4f46e5;
   --hx-primary-hover: #4338ca;
   --hx-primary-fg: #ffffff;
@@ -45,8 +40,6 @@
   --hx-danger: #dc2626;
   --hx-danger-hover: #b91c1c;
   --hx-danger-fg: #ffffff;
-  /* Deeper red for tinted-glass fills: keeps white text ≥ 5:1. */
-  --hx-danger-solid: #b91c1c;
   /* Error messages: readable red text (≥ 5:1 on glass). */
   --hx-danger-text: #b91c1c;
 
@@ -59,7 +52,6 @@
   --hx-info-text: #4338ca;
   --hx-neutral: #64748b;
   --hx-neutral-text: #475569;
-  --hx-danger-solid-hover: #991b1b;
 
   --hx-ring: color-mix(in oklch, var(--hx-accent) 55%, transparent);
 
@@ -79,26 +71,18 @@
   --hx-stain-shadow-near: 22%;
   --hx-stain-shadow-far: 45%;
   --hx-stain-shadow-neutral: 0 0 #0000;
-  --hx-danger-stain-extra: 0%;
-  /* One colored lit border (see glass-stained): no separate white rim or gloss on a pale pane. */
-  --hx-stain-rim: 0;
-  --hx-stain-gloss: 0;
-  --hx-stain-caustic: 0;
-  --hx-stain-floor: transparent;
 
-  /* Glass surfaces: opaque enough to stay readable on any background. */
+  /* Veils of glass surfaces on a plain page; over a picture they are nearly transparent (see below). */
   --hx-glass-thin: rgb(255 255 255 / 0.4);
   --hx-glass: rgb(255 255 255 / 0.5);
   --hx-glass-strong: rgb(255 255 255 / 0.88);
-  /* Raised: a selected segment sitting on a glass surface (tabs indicator). */
-  --hx-glass-raised: rgb(255 255 255 / 0.92);
   /* Ring around avatars: the surface color, so stacked avatars stay apart. */
   --hx-avatar-ring: rgb(255 255 255 / 0.85);
   /* Current page in a navigation (sidebar item, selected tab): a clear glass chip, not the near-opaque raised white,
      which reads as a flat white block on light glass. Its lit border and shadow set it apart. */
   --hx-nav-active: rgb(255 255 255 / 0.45);
   --hx-nav-active-border: rgb(255 255 255 / 0.8);
-  /* Dialogs sit on a dimmed overlay and blur hard, so they can be more transparent. */
+  /* Dialogs sit on a dimmed overlay and keep a stronger frost, so their veil can be lighter. */
   --hx-glass-dialog: rgb(255 255 255 / 0.62);
   --hx-glass-hover: rgb(255 255 255 / 0.88);
   --hx-glass-active: rgb(243 244 246 / 0.92);
@@ -116,8 +100,6 @@
   --hx-glass-border: rgb(0 0 0 / 0.09);
   --hx-glass-highlight: rgb(255 255 255 / 0.75);
   --hx-glass-overlay: rgb(12 12 12 / 0.14);
-  /* Light glass is more transparent, so it blurs harder: more color, never readable shapes. */
-  --hx-glass-blur: 20px;
   /* In light mode depth comes from shadows, not light: keep them a little crisper. */
   --hx-glass-shadow: 0 1px 2px rgb(15 23 42 / 0.06), 0 10px 30px -8px rgb(15 23 42 / 0.16);
   --hx-glass-shadow-lg: 0 2px 6px rgb(15 23 42 / 0.06), 0 28px 56px -14px rgb(15 23 42 / 0.28);
@@ -139,17 +121,18 @@
   );
   --hx-glass-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.2), rgb(255 255 255 / 0) 40%);
   --hx-glass-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
-  /* Liquid glass: a light blur so the bent rim stays legible, the glow of the
-     pane's thickness, the width of the rim, how far it shifts what is behind it and how much it splits colors
-     (0 to 1). A surface narrower than two rims bends proportionally less. Splitting colors triples the work of
-     every refracting surface, so it is off by default. */
+  /* Liquid glass. The rim tokens are read by lib/liquid-glass/engine: its width, how far it shifts what is
+     behind it, and how much it splits colors (0 to 1; it triples the work of each surface, so off by default).
+     A surface narrower than two rims bends proportionally less. */
   --hx-liquid-bezel: 28px;
   --hx-liquid-bend: 30px;
   --hx-liquid-fringe: 0;
+  /* A light blur, so the bent rim stays legible. */
   --hx-liquid-blur: 8px;
   /* How a pane evens out what is behind it once it has something to show through (see "Panes over a picture").
      Light theme: lift dark areas far more than bright ones, into a pale wash dark text holds on. */
   --hx-pane-tone: contrast(0.35) brightness(1.6);
+  /* Inner glow of a pane's thickness. */
   --hx-liquid-rim: inset 0 0 14px -4px rgb(255 255 255 / 0.7);
 
   /* Backdrop: page base + three glows (indigo, cyan, soft violet). */
@@ -169,42 +152,34 @@
  * ------------------------------------------------------------------------- */
 .dark,
 [data-theme='dark'] {
-  --hx-fg: #e5e7eb;
-  --hx-fg-muted: #9ca3af;
-  --hx-fg-subtle: #6b7280;
+  --hx-fg: #ffffff;
+  --hx-fg-muted: rgb(255 255 255 / 0.82);
+  --hx-fg-subtle: rgb(255 255 255 / 0.72);
 
   --hx-brand: #6366f1;
   --hx-primary: #4f46e5;
   --hx-primary-hover: #5850ec;
   --hx-primary-fg: #ffffff;
-  --hx-accent: #818cf8;
+  --hx-accent: #c7d2fe;
 
   --hx-danger: #dc2626;
   --hx-danger-hover: #b91c1c;
   --hx-danger-fg: #ffffff;
-  /* Deeper red for tinted-glass fills: keeps white text ≥ 5:1. */
-  --hx-danger-solid: #b91c1c;
   /* Error messages: readable red text (≥ 5:1 on glass). */
-  --hx-danger-text: #f87171;
+  --hx-danger-text: #fecaca;
 
   --hx-success: #22c55e;
-  --hx-success-text: #4ade80;
+  --hx-success-text: #bbf7d0;
   --hx-warning: #f59e0b;
-  --hx-warning-text: #fbbf24;
+  --hx-warning-text: #fde68a;
   --hx-info: #6366f1;
-  --hx-info-text: #a5b4fc;
+  --hx-info-text: #c7d2fe;
   --hx-neutral: #94a3b8;
-  --hx-neutral-text: #cbd5e1;
-  --hx-danger-solid-hover: #991b1b;
+  --hx-neutral-text: #e2e8f0;
 
   --hx-ring: color-mix(in oklch, var(--hx-accent) 60%, transparent);
 
-  /* Stained glass over dark surfaces: the same dense pane and white text as the light theme. */
-  --hx-primary-stain: #4f46e5;
-  --hx-danger-stain: #dc2626;
-  --hx-primary-stain-text: #ffffff;
-  --hx-danger-stain-text: #ffffff;
-  --hx-danger-stain-extra: 0%;
+  /* Stained glass: the same pane and white text as the light theme, a little thinner over a dark page. */
   --hx-stain-top: 44%;
   --hx-stain-bottom: 60%;
   --hx-stain-tone: contrast(0.75) brightness(0.7);
@@ -213,36 +188,31 @@
   --hx-stain-shadow-near: 0%;
   --hx-stain-shadow-far: 0%;
   --hx-stain-shadow-neutral: var(--hx-glass-shadow);
-  --hx-stain-rim: 0;
-  --hx-stain-gloss: 0;
-  --hx-stain-caustic: 0;
-  --hx-stain-floor: transparent;
 
-  --hx-glass-thin: rgb(30 30 34 / 0.42);
-  --hx-glass-blur: 16px;
-  --hx-glass: rgb(26 26 30 / 0.58);
-  --hx-glass-strong: rgb(22 22 26 / 0.84);
-  --hx-glass-raised: rgb(64 64 72 / 0.6);
+  /* Nearly transparent panes: the pane darkens what is behind it instead (--hx-pane-tone). */
+  --hx-glass-thin: rgb(0 0 0 / 0.08);
+  --hx-glass: rgb(0 0 0 / 0.12);
+  --hx-glass-strong: rgb(0 0 0 / 0.34);
   --hx-avatar-ring: rgb(30 30 34 / 0.9);
   /* Clear glass chip, like the light theme. Any flat veil reads as solid gray over a dark surface, so the
      fill is almost nothing and the chip is drawn by light: a lit border and a bright top rim. */
   --hx-nav-active: rgb(255 255 255 / 0.03);
   --hx-nav-active-border: rgb(255 255 255 / 0.12);
   --hx-nav-active-highlight: rgb(255 255 255 / 0.22);
-  --hx-glass-dialog: rgb(22 22 26 / 0.56);
-  --hx-glass-hover: rgb(38 38 38 / 0.78);
-  --hx-glass-active: rgb(46 46 46 / 0.82);
-  --hx-tint-hover: rgb(255 255 255 / 0.05);
-  --hx-tint-active: rgb(255 255 255 / 0.09);
+  --hx-glass-dialog: rgb(0 0 0 / 0.3);
+  --hx-glass-hover: rgb(255 255 255 / 0.14);
+  --hx-glass-active: rgb(255 255 255 / 0.2);
+  --hx-tint-hover: rgb(255 255 255 / 0.1);
+  --hx-tint-active: rgb(255 255 255 / 0.16);
   --hx-switch-track: rgb(255 255 255 / 0.14);
   --hx-switch-track-hover: rgb(255 255 255 / 0.2);
-  --hx-glass-field: rgb(0 0 0 / 0.28);
-  --hx-field-border: rgb(255 255 255 / 0.2);
-  --hx-field-border-hover: rgb(255 255 255 / 0.3);
-  --hx-field-inset: rgb(0 0 0 / 0.35);
-  --hx-glass-border: rgb(255 255 255 / 0.07);
-  --hx-glass-highlight: rgb(255 255 255 / 0.08);
-  --hx-glass-overlay: rgb(0 0 0 / 0.6);
+  --hx-glass-field: rgb(255 255 255 / 0.1);
+  --hx-field-border: rgb(255 255 255 / 0.3);
+  --hx-field-border-hover: rgb(255 255 255 / 0.5);
+  --hx-field-inset: rgb(0 0 0 / 0.18);
+  --hx-glass-border: rgb(255 255 255 / 0.18);
+  --hx-glass-highlight: rgb(255 255 255 / 0.28);
+  --hx-glass-overlay: rgb(0 0 0 / 0.4);
   --hx-glass-shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -6px rgb(0 0 0 / 0.5);
   --hx-glass-shadow-lg: 0 2px 4px rgb(0 0 0 / 0.4), 0 24px 48px -12px rgb(0 0 0 / 0.7);
   --hx-glass-edge: linear-gradient(
@@ -259,13 +229,15 @@
     rgb(255 255 255 / 0) 55%,
     rgb(255 255 255 / 0.22)
   );
-  --hx-glass-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.06), rgb(255 255 255 / 0) 45%);
+  --hx-glass-sheen: none;
   --hx-liquid-blur: 6px;
+  --hx-pane-text-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+  --hx-tint-tone: var(--hx-pane-tone);
   /* Dark theme: flatten, then darken, so bright areas come down far more than dark ones. */
   --hx-pane-tone: contrast(var(--hx-pane-flatten)) brightness(var(--hx-pane-dim));
   --hx-pane-dim: 0.7;
   --hx-pane-flatten: 0.75;
-  --hx-liquid-rim: inset 0 0 14px -4px rgb(255 255 255 / 0.16);
+  --hx-liquid-rim: inset 0 0 14px -4px rgb(255 255 255 / 0.3);
 
   --hx-backdrop-base: #0c0c0c;
   --hx-backdrop-accent-1: color-mix(in oklch, var(--hx-brand) 28%, transparent);
@@ -277,67 +249,23 @@
   color-scheme: dark;
 }
 
-/* Liquid glass: page buttons of a pagination are circles, and colored and outlined buttons blur as lightly
-   as the other panes. */
+/* Tinted glass, the same in both themes (see glass-tint). */
 :root {
-  --hx-pagination-radius: 9999px;
-  /* Checked controls and bars (see glass-tint). --hx-tint-tone is how they darken what is behind them. */
   --hx-tint-density: 60%;
   --hx-tint-sheen: linear-gradient(180deg, transparent, rgb(0 0 0 / 0.16));
   --hx-tint-frame: 55%;
-  --hx-tint-frame-base: white;
   --hx-tint-shadow: inset 0 1px 2px 0 rgb(0 0 0 / 0.28);
   --hx-tint-glow: 55%;
   --hx-tint-filter: blur(var(--hx-liquid-blur)) saturate(180%) var(--hx-tint-tone,);
-  --hx-stain-blur: var(--hx-liquid-blur);
-  --hx-ring-filter: blur(var(--hx-liquid-blur)) saturate(180%);
 }
 
 /* ---------------------------------------------------------------------------
- * Panes over a picture: in the dark theme, or over a Backdrop image, every surface is a nearly transparent pane and
- * surfaces only differ by how thick their veil is. Text must stay readable over anything, so the pane evens out
- * what is behind it, toward the side the theme writes on: the dark theme darkens it and writes in white, the
- * light theme lightens it and writes in dark. A plain light page has nothing to show through and keeps the
- * regular veils.
+ * Panes over a picture. With something to show through, every surface is a nearly transparent pane and
+ * surfaces only differ by how thick their veil is. Text must stay readable over anything, so each pane evens
+ * out what is behind it, toward the side the theme writes on (--hx-pane-tone): the dark theme always does,
+ * darkening it under white text (see its tokens above); the light theme does over a Backdrop image, lightening
+ * it under dark text. A plain light page has nothing to show through and keeps the regular veils.
  * ------------------------------------------------------------------------- */
-:root:is(.dark, [data-theme='dark']) {
-  --hx-pane-text-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
-  --hx-tint-tone: var(--hx-pane-tone);
-  --hx-fg: #ffffff;
-  --hx-fg-muted: rgb(255 255 255 / 0.82);
-  --hx-fg-subtle: rgb(255 255 255 / 0.72);
-  --hx-glass-thin: rgb(0 0 0 / 0.08);
-  --hx-glass: rgb(0 0 0 / 0.12);
-  --hx-glass-strong: rgb(0 0 0 / 0.34);
-  --hx-glass-dialog: rgb(0 0 0 / 0.3);
-  --hx-glass-border: rgb(255 255 255 / 0.18);
-  --hx-glass-highlight: rgb(255 255 255 / 0.28);
-  --hx-glass-sheen: none;
-  --hx-tint-hover: rgb(255 255 255 / 0.1);
-  --hx-tint-active: rgb(255 255 255 / 0.16);
-  --hx-liquid-rim: inset 0 0 14px -4px rgb(255 255 255 / 0.3);
-  /* Hovered, pressed and selected panes light up instead of turning into opaque gray chips. */
-  --hx-glass-hover: rgb(255 255 255 / 0.14);
-  --hx-glass-active: rgb(255 255 255 / 0.2);
-  --hx-glass-raised: rgb(255 255 255 / 0.16);
-  /* Dialogs darken what is behind them themselves: a lighter veil is enough to set them apart. */
-  --hx-glass-overlay: rgb(0 0 0 / 0.4);
-  /* Fields: a lighter inset instead of a dark well, drawn by its pale border. */
-  --hx-glass-field: rgb(255 255 255 / 0.1);
-  --hx-field-border: rgb(255 255 255 / 0.3);
-  --hx-field-border-hover: rgb(255 255 255 / 0.5);
-  --hx-field-inset: rgb(0 0 0 / 0.18);
-  /* Accent as text on darkened glass (outline buttons, links, check marks). */
-  --hx-accent: #c7d2fe;
-  /* Status and error text: pale tints, readable on a pane of any hue. */
-  --hx-success-text: #bbf7d0;
-  --hx-warning-text: #fde68a;
-  --hx-info-text: #c7d2fe;
-  --hx-neutral-text: #e2e8f0;
-  --hx-danger-text: #fecaca;
-}
-
-/* Light theme over a Backdrop image: no dark veil, the panes lighten what is behind them (see --hx-pane-tone). */
 :root:has(.hx-backdrop-image):not(.dark, [data-theme='dark']) {
   --hx-pane-text-shadow: none;
   /* A cool veil rather than a white one: over a pale sky the lightened pane would otherwise be pure white. */
@@ -372,7 +300,6 @@
   --hx-glass-sheen: none;
   --hx-glass-hover: rgb(255 255 255 / 0.4);
   --hx-glass-active: rgb(255 255 255 / 0.5);
-  --hx-glass-raised: rgb(255 255 255 / 0.45);
   --hx-glass-field: rgb(255 255 255 / 0.32);
 }
 
@@ -416,8 +343,8 @@
   --color-switch-track-hover: var(--hx-switch-track-hover);
 }
 
-/* Liquid glass values of one surface: not inherited, so a surface nested in another never picks up its
-   parent's refraction filter, dimming or frost. Blur layers (::after) inherit them explicitly. */
+/* Values of one surface: not inherited, so a surface nested in another never picks up its parent's
+   refraction, dimming or frost. */
 @property --hx-liquid-refraction {
   syntax: '*';
   inherits: false;
@@ -460,13 +387,13 @@
  * ------------------------------------------------------------------------- */
 
 /*
- * Glass surfaces share the same material: translucent fill + top sheen + fine grain,
- * a lit edge (::before, masked to a 1px ring) and a soft shadow.
- * Elements need a positioning context for the edge; see the components layer below.
+ * Glass surfaces share the same material: a translucent veil with a fine grain, a lit edge (::before, masked
+ * to a 1px ring), a soft shadow, and a pane filter (--hx-glass-filter): a light blur, scaled by
+ * --hx-liquid-frost, that also evens out the backdrop over a picture (--hx-liquid-dim) and bends it along the
+ * rim (--hx-liquid-refraction, set by lib/liquid-glass/engine in Chromium).
  *
- * Surfaces (thin, default, strong, dialog) do not blur themselves: they set --hx-glass-filter
- * and a ::after layer behind their content applies it. An element with backdrop-filter
- * becomes a "backdrop root" in Chrome, and nothing inside it (sticky table header, floating
+ * Surfaces do not apply the filter themselves: a ::after layer behind their content does. An element with
+ * backdrop-filter becomes a "backdrop root" in Chrome, and nothing inside it (sticky table header, floating
  * bar, secondary button) could blur the surface's own content any more.
  */
 
@@ -481,7 +408,6 @@
   box-shadow:
     inset 0 1px 0 0 var(--hx-glass-highlight),
     var(--hx-glass-shadow);
-  --hx-glass-filter: blur(calc(var(--hx-glass-blur) * 1.25)) saturate(180%);
 }
 
 /* Standard surface: cards, panels, secondary buttons. */
@@ -495,10 +421,9 @@
   box-shadow:
     inset 0 1px 0 0 var(--hx-glass-highlight),
     var(--hx-glass-shadow);
-  --hx-glass-filter: blur(var(--hx-glass-blur)) saturate(170%);
 }
 
-/* Elevated surface: dialogs, popovers, menus — more opaque for long-form reading. */
+/* Elevated surface: popovers, menus — a thicker veil and more frost for long-form reading. */
 @utility glass-strong {
   background-color: var(--hx-glass-strong);
   background-image: var(--hx-glass-grain), var(--hx-glass-sheen);
@@ -509,12 +434,10 @@
   box-shadow:
     inset 0 1px 0 0 var(--hx-glass-highlight),
     var(--hx-glass-shadow-lg);
-  --hx-glass-filter: blur(calc(var(--hx-glass-blur) * 1.5)) saturate(180%);
   --hx-liquid-frost: 1.5;
 }
 
-/* Dialog surface: lighter than glass-strong, compensated by a much stronger blur
-   so content behind turns into color, never into readable shapes. */
+/* Dialog surface: lighter than glass-strong, compensated by a much stronger frost. */
 @utility glass-dialog {
   background-color: var(--hx-glass-dialog);
   background-image: var(--hx-glass-grain), var(--hx-glass-sheen);
@@ -525,7 +448,6 @@
   box-shadow:
     inset 0 1px 0 0 var(--hx-glass-highlight),
     var(--hx-glass-shadow-lg);
-  --hx-glass-filter: blur(calc(var(--hx-glass-blur) * 2.5)) saturate(180%);
   /* Dialogs keep a real frost: what is behind them must never be readable. */
   --hx-liquid-frost: 3;
 }
@@ -533,37 +455,25 @@
 /* Tinted glass: checked switches, checkboxes and radios, and the filled part of sliders and progress bars.
    A colored pane the page shows through (--hx-tint-density), denser at the bottom, with a frame in its own
    color and a recessed top. It darkens what is behind it (--hx-tint-tone), so the state reads at a glance and
-   a white mark stays ≥ 4.5:1 on any backdrop. Set --hx-tint-fill / --hx-tint-fill-hover to change the color.
-   The fallbacks are the dense pane used when the tokens are unset. */
+   a white mark stays ≥ 4.5:1 on any backdrop. Set --hx-tint-fill / --hx-tint-fill-hover to change the color. */
 @utility glass-tint {
-  background-color: color-mix(
-    in oklch,
-    var(--hx-tint-fill, var(--hx-primary)) var(--hx-tint-density, 85%),
-    transparent
-  );
-  background-image:
-    var(--hx-glass-grain),
-    var(--hx-tint-sheen, linear-gradient(180deg, rgb(255 255 255 / 0.2), rgb(255 255 255 / 0) 55%));
+  background-color: color-mix(in oklch, var(--hx-tint-fill, var(--hx-primary)) var(--hx-tint-density), transparent);
+  background-image: var(--hx-glass-grain), var(--hx-tint-sheen);
   background-size:
     160px 160px,
     100% 100%;
   /* Frame and transmitted light take the pane's own color, so a recolored pane (a complete progress bar)
      stays consistent. */
-  border: 1px solid
-    color-mix(
-      in oklch,
-      var(--hx-tint-fill, var(--hx-primary)) var(--hx-tint-frame, 0%),
-      var(--hx-tint-frame-base, rgb(255 255 255 / 0.12))
-    );
+  border: 1px solid color-mix(in oklch, var(--hx-tint-fill, var(--hx-primary)) var(--hx-tint-frame), white);
   box-shadow:
-    var(--hx-tint-shadow, inset 0 1px 0 0 rgb(255 255 255 / 0.25), var(--hx-glass-shadow)),
-    0 2px 8px -2px color-mix(in oklch, var(--hx-tint-fill, var(--hx-primary)) var(--hx-tint-glow, 0%), transparent);
-  backdrop-filter: var(--hx-tint-filter, blur(var(--hx-glass-blur)) saturate(170%));
+    var(--hx-tint-shadow),
+    0 2px 8px -2px color-mix(in oklch, var(--hx-tint-fill, var(--hx-primary)) var(--hx-tint-glow), transparent);
+  backdrop-filter: var(--hx-tint-filter);
 
   &:hover {
     background-color: color-mix(
       in oklch,
-      var(--hx-tint-fill-hover, var(--hx-primary-hover)) calc(var(--hx-tint-density, 85%) + 3%),
+      var(--hx-tint-fill-hover, var(--hx-primary-hover)) calc(var(--hx-tint-density) + 3%),
       transparent
     );
   }
@@ -574,7 +484,7 @@
    darkens what is behind it (--hx-stain-tone), so the white text holds on any page.
    Set --hx-stain (pane color) and --hx-stain-text to recolor it (see the danger button). */
 @utility glass-stained {
-  --hx-stain-lift: var(--hx-stain-extra, 0%);
+  --hx-stain-lift: 0%;
   /* Lit edge in the pane's own color: strongest at the top left, with a second highlight at the bottom right. */
   --hx-glass-edge: linear-gradient(
     150deg,
@@ -586,12 +496,6 @@
   background-color: transparent;
   background-image:
     var(--hx-glass-grain),
-    linear-gradient(
-      180deg,
-      rgb(255 255 255 / var(--hx-stain-gloss)),
-      rgb(255 255 255 / calc(var(--hx-stain-gloss) * 0.4)) 24%,
-      rgb(255 255 255 / 0) 30%
-    ),
     linear-gradient(
       180deg,
       color-mix(
@@ -607,44 +511,39 @@
     );
   background-size:
     160px 160px,
-    100% 100%,
     100% 100%;
   border: 1px solid color-mix(in oklch, var(--hx-stain, var(--hx-primary-stain)) var(--hx-stain-frame), transparent);
   box-shadow:
-    inset 0 1px 0 0 rgb(255 255 255 / var(--hx-stain-rim)),
-    inset 0 -8px 12px -8px rgb(255 255 255 / var(--hx-stain-caustic)),
-    inset 0 -1px 0 0 var(--hx-stain-floor),
     0 1px 2px color-mix(in oklch, var(--hx-stain, var(--hx-primary-stain)) var(--hx-stain-shadow-near), transparent),
     0 6px 16px -6px
       color-mix(in oklch, var(--hx-stain, var(--hx-primary-stain)) var(--hx-stain-shadow-far), transparent),
     var(--hx-stain-shadow-neutral);
-  backdrop-filter: blur(var(--hx-stain-blur, calc(var(--hx-glass-blur) * 1.5))) saturate(180%) var(--hx-stain-tone,)
-    var(--hx-liquid-refraction,);
+  backdrop-filter: blur(var(--hx-liquid-blur)) saturate(180%) var(--hx-stain-tone,) var(--hx-liquid-refraction,);
 
   &:hover {
-    --hx-stain-lift: calc(var(--hx-stain-extra, 0%) + var(--hx-stain-hover));
+    --hx-stain-lift: var(--hx-stain-hover);
   }
 
   &:active {
-    --hx-stain-lift: calc(var(--hx-stain-extra, 0%) + var(--hx-stain-hover) * 1.6);
+    --hx-stain-lift: calc(var(--hx-stain-hover) * 1.6);
   }
 }
 
 /* Ring: an outlined control. A pane of its own, so its label never sits on the raw page. */
 @utility glass-ring {
-  -webkit-backdrop-filter: var(--hx-ring-filter,) var(--hx-liquid-dim,) var(--hx-liquid-refraction,);
-  backdrop-filter: var(--hx-ring-filter,) var(--hx-liquid-dim,) var(--hx-liquid-refraction,);
+  -webkit-backdrop-filter: blur(var(--hx-liquid-blur)) saturate(180%) var(--hx-liquid-dim,) var(--hx-liquid-refraction,);
+  backdrop-filter: blur(var(--hx-liquid-blur)) saturate(180%) var(--hx-liquid-dim,) var(--hx-liquid-refraction,);
 }
 
-/* Form fields: recessed into the glass — darker fill, firm border, inner top shadow. */
+/* Form fields: an inset pane with a firm border and an inner top shadow. */
 @utility glass-field {
   background-color: var(--hx-glass-field);
   border: 1px solid var(--hx-field-border);
   box-shadow: inset 0 1px 2px 0 var(--hx-field-inset);
-  backdrop-filter: blur(calc(var(--hx-glass-blur) * 0.5)) var(--hx-liquid-dim,);
+  backdrop-filter: blur(var(--hx-liquid-blur)) var(--hx-liquid-dim,);
 }
 
-/* Glass bead: the switch thumb — white pebble with a top highlight and a soft drop shadow. */
+/* Glass bead: thumbs and the radio dot — a white pebble with a top highlight and a soft drop shadow. */
 @utility glass-bead {
   background: linear-gradient(180deg, #ffffff, #eef0f4);
   box-shadow:
@@ -697,6 +596,8 @@
      It redraws the grain and top highlight, which the blur would otherwise smear. */
   :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog) {
     isolation: isolate;
+    --hx-glass-filter: blur(calc(var(--hx-liquid-blur) * var(--hx-liquid-frost, 1))) saturate(180%)
+      var(--hx-liquid-dim,) var(--hx-liquid-refraction,);
   }
 
   :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog):not(.hx-toast)::after {
@@ -707,31 +608,19 @@
     border-radius: inherit;
     background-image: var(--hx-glass-grain);
     background-size: 160px 160px;
-    box-shadow: inset 0 1px 0 0 var(--hx-glass-highlight);
+    box-shadow:
+      inset 0 1px 0 0 var(--hx-glass-highlight),
+      var(--hx-liquid-rim);
     -webkit-backdrop-filter: var(--hx-glass-filter);
     backdrop-filter: var(--hx-glass-filter);
     pointer-events: none;
   }
 
-  /* Liquid glass: blur layers blur lightly and bend what is behind them along the rim, like a thick pane. The
-     refraction is an SVG filter the library draws for each surface (see lib/liquid-glass/engine); only Chromium
-     runs one in backdrop-filter, so elsewhere the variable stays unset and surfaces are the same panes without
-     the bent rim. */
-  :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog):not(.hx-toast)::after {
-    --hx-liquid-refraction: inherit;
-    --hx-liquid-dim: inherit;
-    --hx-liquid-frost: inherit;
-    box-shadow:
-      inset 0 1px 0 0 var(--hx-glass-highlight),
-      var(--hx-liquid-rim);
-    -webkit-backdrop-filter: blur(calc(var(--hx-liquid-blur) * var(--hx-liquid-frost, 1))) saturate(180%)
-      var(--hx-liquid-dim,) var(--hx-liquid-refraction,);
-    backdrop-filter: blur(calc(var(--hx-liquid-blur) * var(--hx-liquid-frost, 1))) saturate(180%) var(--hx-liquid-dim,)
-      var(--hx-liquid-refraction,);
-  }
-
-  /* Toasts use ::after to bridge the gap between them, and nothing inside them needs to blur. */
+  /* Toasts use ::after to bridge the gap between them, and nothing inside them needs to blur. A toast is a
+     small note over the page: the frost of an elevated surface with the standard veil, so the page shows
+     through. */
   .hx-toast {
+    --hx-glass-strong: var(--hx-glass);
     -webkit-backdrop-filter: var(--hx-glass-filter);
     backdrop-filter: var(--hx-glass-filter);
   }
@@ -749,18 +638,6 @@
     backdrop-filter: var(--hx-glass-filter);
   }
 
-  :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog):where(
-    [data-open],
-    [data-closed],
-    [data-starting-style],
-    [data-ending-style]
-  ) {
-    -webkit-backdrop-filter: blur(calc(var(--hx-liquid-blur) * var(--hx-liquid-frost, 1))) saturate(180%)
-      var(--hx-liquid-dim,) var(--hx-liquid-refraction,);
-    backdrop-filter: blur(calc(var(--hx-liquid-blur) * var(--hx-liquid-frost, 1))) saturate(180%) var(--hx-liquid-dim,)
-      var(--hx-liquid-refraction,);
-  }
-
   :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog):not(.hx-toast):is(
       [data-open],
       [data-closed],
@@ -772,13 +649,13 @@
   }
 
   /* Over a picture every surface evens out what is behind it, except one already sitting in such a surface. */
-  :where(:root:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image)))
+  :where(.dark, [data-theme='dark'], :root:has(.hx-backdrop-image))
     :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog, .hx\:glass-ring, .hx\:glass-field) {
     --hx-liquid-dim: var(--hx-pane-tone);
     text-shadow: var(--hx-pane-text-shadow);
   }
 
-  :where(:root:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image)))
+  :where(.dark, [data-theme='dark'], :root:has(.hx-backdrop-image))
     :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog)
     :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog, .hx\:glass-ring, .hx\:glass-field) {
     --hx-liquid-dim: initial;
@@ -786,20 +663,9 @@
 
   /* Toasts pile up: if each evened out what is behind it, the front one would sit on a solid stack. Only the
      front toast does, and all of them once the stack is fanned out and they no longer overlap. */
-  :where(:root:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image)))
+  :where(.dark, [data-theme='dark'], :root:has(.hx-backdrop-image))
     .hx-toast:has(> .hx-toast-content[data-behind]):not([data-expanded]) {
     --hx-liquid-dim: initial;
-  }
-
-  /* A toast is a small note over the page, not a dialog: the standard veil and a light frost, so the page
-     still shows through it. */
-  .hx-toast {
-    --hx-liquid-frost: 1.5;
-    --hx-glass-dialog: var(--hx-glass);
-    -webkit-backdrop-filter: blur(calc(var(--hx-liquid-blur) * var(--hx-liquid-frost, 1))) saturate(180%)
-      var(--hx-liquid-dim,) var(--hx-liquid-refraction,);
-    backdrop-filter: blur(calc(var(--hx-liquid-blur) * var(--hx-liquid-frost, 1))) saturate(180%) var(--hx-liquid-dim,)
-      var(--hx-liquid-refraction,);
   }
 }
 
@@ -1029,7 +895,7 @@
 
 /*
  * Accessibility fallbacks: no blur support, user asked for less transparency,
- * or Windows high-contrast mode → fall back to fully opaque surfaces.
+ * or Windows high-contrast mode → fully opaque surfaces and solid colored controls.
  */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   /* The extra :root raise these above the tokens of panes over a picture. */
@@ -1047,7 +913,6 @@
     --hx-glass: #ffffff;
     --hx-glass-strong: #ffffff;
     --hx-glass-dialog: #ffffff;
-    --hx-glass-raised: #ffffff;
     --hx-glass-field: #ffffff;
   }
   .dark,
@@ -1064,7 +929,6 @@
     --hx-glass: #141414;
     --hx-glass-strong: #171717;
     --hx-glass-dialog: #171717;
-    --hx-glass-raised: #2a2a2f;
     --hx-glass-field: #0f0f0f;
   }
 }
@@ -1084,10 +948,8 @@
     --hx-glass: #ffffff;
     --hx-glass-strong: #ffffff;
     --hx-glass-dialog: #ffffff;
-    --hx-glass-raised: #ffffff;
     --hx-glass-thin: #ffffff;
     --hx-glass-field: #ffffff;
-    --hx-glass-blur: 0px;
     --hx-glass-grain: none;
   }
   .dark,
@@ -1103,10 +965,8 @@
     --hx-glass: #141414;
     --hx-glass-strong: #171717;
     --hx-glass-dialog: #171717;
-    --hx-glass-raised: #2a2a2f;
     --hx-glass-thin: #1a1a1a;
     --hx-glass-field: #0f0f0f;
-    --hx-glass-blur: 0px;
     --hx-glass-grain: none;
   }
 }
