@@ -139,6 +139,18 @@
   );
   --hx-glass-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.2), rgb(255 255 255 / 0) 40%);
   --hx-glass-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  /* Liquid glass (see the LiquidGlass component): a light blur so the bent rim stays legible, the glow of the
+     pane's thickness, the width of the rim, how far it shifts what is behind it and how much it splits colors
+     (0 to 1). A surface narrower than two rims bends proportionally less. Splitting colors triples the work of
+     every refracting surface, so it is off by default. */
+  --hx-liquid-bezel: 28px;
+  --hx-liquid-bend: 30px;
+  --hx-liquid-fringe: 0;
+  --hx-liquid-blur: 8px;
+  /* Clear glass (white text over photos): a faint veil, and how much the pane darkens what is behind it. */
+  --hx-glass-clear: rgb(15 23 42 / 0.12);
+  --hx-clear-dim: 0.68;
+  --hx-liquid-rim: inset 0 0 14px -4px rgb(255 255 255 / 0.7);
 
   /* Backdrop: page base + three glows (indigo, cyan, soft violet). */
   /* Slightly darker than the glass so white surfaces stand out by contrast. */
@@ -154,9 +166,12 @@
 
 /* ---------------------------------------------------------------------------
  * Semantic tokens — dark
+ * Clear liquid glass writes in white on every surface, so it takes the dark tokens in both themes
+ * (see the block below for what it changes).
  * ------------------------------------------------------------------------- */
 .dark,
-[data-theme='dark'] {
+[data-theme='dark'],
+[data-liquid='clear'] {
   --hx-fg: #e5e7eb;
   --hx-fg-muted: #9ca3af;
   --hx-fg-subtle: #6b7280;
@@ -248,6 +263,10 @@
     rgb(255 255 255 / 0.22)
   );
   --hx-glass-sheen: linear-gradient(180deg, rgb(255 255 255 / 0.06), rgb(255 255 255 / 0) 45%);
+  --hx-liquid-blur: 6px;
+  --hx-glass-clear: rgb(0 0 0 / 0.1);
+  --hx-clear-dim: 0.7;
+  --hx-liquid-rim: inset 0 0 14px -4px rgb(255 255 255 / 0.16);
 
   --hx-backdrop-base: #0c0c0c;
   --hx-backdrop-accent-1: color-mix(in oklch, var(--hx-brand) 28%, transparent);
@@ -257,6 +276,64 @@
   --hx-backdrop-subtle-opacity: 0.6;
 
   color-scheme: dark;
+}
+
+/* Liquid glass, any mode: controls are capsules, the shape whose rim bends evenly all the way round, and
+   colored and outlined buttons blur as lightly as the other panes. */
+[data-liquid] {
+  --hx-button-radius: 9999px;
+  /* A capsule for one-line fields, a soft corner for taller ones (text areas, chip lists). */
+  --hx-field-radius: 1.125rem;
+  --hx-stain-blur: var(--hx-liquid-blur);
+  --hx-ring-filter: blur(var(--hx-liquid-blur)) saturate(180%);
+}
+
+/* ---------------------------------------------------------------------------
+ * Clear liquid glass everywhere (<LiquidGlass clear />): every surface becomes a nearly transparent pane that
+ * darkens what is behind it, with white text. Surfaces differ by how thick their veil is.
+ * ------------------------------------------------------------------------- */
+[data-liquid='clear'] {
+  --hx-fg: #ffffff;
+  --hx-fg-muted: rgb(255 255 255 / 0.82);
+  --hx-fg-subtle: rgb(255 255 255 / 0.64);
+  --hx-glass-thin: rgb(0 0 0 / 0.08);
+  --hx-glass: rgb(0 0 0 / 0.12);
+  --hx-glass-strong: rgb(0 0 0 / 0.34);
+  --hx-glass-dialog: rgb(0 0 0 / 0.3);
+  --hx-glass-border: rgb(255 255 255 / 0.18);
+  --hx-glass-highlight: rgb(255 255 255 / 0.28);
+  --hx-glass-sheen: none;
+  --hx-tint-hover: rgb(255 255 255 / 0.1);
+  --hx-tint-active: rgb(255 255 255 / 0.16);
+  --hx-liquid-rim: inset 0 0 14px -4px rgb(255 255 255 / 0.3);
+  /* Hovered, pressed and selected panes light up instead of turning into opaque gray chips. */
+  --hx-glass-hover: rgb(255 255 255 / 0.14);
+  --hx-glass-active: rgb(255 255 255 / 0.2);
+  --hx-glass-raised: rgb(255 255 255 / 0.16);
+  /* Colored buttons: tinted glass dense enough for white text (≥ 4.5:1 over a darkened bright photo). */
+  --hx-primary-stain-text: #ffffff;
+  --hx-danger-stain-text: #ffffff;
+  --hx-stain-top: 44%;
+  --hx-stain-bottom: 60%;
+  --hx-danger-stain-extra: 0%;
+  /* Fields: a lighter inset instead of a dark well, drawn by its pale border. */
+  --hx-glass-field: rgb(255 255 255 / 0.1);
+  --hx-field-border: rgb(255 255 255 / 0.3);
+  --hx-field-border-hover: rgb(255 255 255 / 0.5);
+  --hx-field-inset: rgb(0 0 0 / 0.18);
+  /* Accent as text on darkened glass (outline buttons, links, check marks). */
+  --hx-accent: #c7d2fe;
+}
+
+/* The page itself keeps the light theme: its backdrop, and panes that darken a bright page more. */
+[data-liquid='clear']:not(.dark, [data-theme='dark']) {
+  --hx-clear-dim: 0.68;
+  --hx-backdrop-base: #eef0f5;
+  --hx-backdrop-accent-1: color-mix(in oklch, var(--hx-brand) 40%, transparent);
+  --hx-backdrop-accent-2: rgb(34 211 238 / 0.3);
+  --hx-backdrop-accent-3: rgb(167 139 250 / 0.45);
+  --hx-backdrop-subtle-opacity: 0.8;
+  --hx-backdrop-line: rgb(0 0 0 / 0.05);
 }
 
 /* Expose the semantic tokens as Tailwind colors: hx:bg-primary, hx:text-fg-muted… */
@@ -297,6 +374,23 @@
   --color-tint-active: var(--hx-tint-active);
   --color-switch-track: var(--hx-switch-track);
   --color-switch-track-hover: var(--hx-switch-track-hover);
+}
+
+/* Liquid glass values of one surface: not inherited, so a surface nested in another never picks up its
+   parent's refraction filter, dimming or frost. Blur layers (::after) inherit them explicitly. */
+@property --hx-liquid-refraction {
+  syntax: '*';
+  inherits: false;
+}
+
+@property --hx-liquid-dim {
+  syntax: '*';
+  inherits: false;
+}
+
+@property --hx-liquid-frost {
+  syntax: '*';
+  inherits: false;
 }
 
 /* ---------------------------------------------------------------------------
@@ -376,6 +470,7 @@
     inset 0 1px 0 0 var(--hx-glass-highlight),
     var(--hx-glass-shadow-lg);
   --hx-glass-filter: blur(calc(var(--hx-glass-blur) * 1.5)) saturate(180%);
+  --hx-liquid-frost: 1.5;
 }
 
 /* Dialog surface: lighter than glass-strong, compensated by a much stronger blur
@@ -391,6 +486,32 @@
     inset 0 1px 0 0 var(--hx-glass-highlight),
     var(--hx-glass-shadow-lg);
   --hx-glass-filter: blur(calc(var(--hx-glass-blur) * 2.5)) saturate(180%);
+  /* Dialogs keep a real frost: what is behind them must never be readable. */
+  --hx-liquid-frost: 3;
+}
+
+/* Clear surface: a nearly transparent pane for photos and video, with white text in both themes.
+   White text needs a pane darker than the page, so instead of a gray veil the pane darkens what is behind it
+   (brightness), which keeps the colors vivid. Text and tint tokens are remapped for its content. */
+@utility glass-clear {
+  --hx-fg: #ffffff;
+  --hx-fg-muted: rgb(255 255 255 / 0.82);
+  --hx-fg-subtle: rgb(255 255 255 / 0.64);
+  --hx-tint-hover: rgb(255 255 255 / 0.1);
+  --hx-tint-active: rgb(255 255 255 / 0.16);
+  --hx-glass-highlight: rgb(255 255 255 / 0.28);
+  --hx-liquid-rim: inset 0 0 14px -4px rgb(255 255 255 / 0.3);
+  --hx-liquid-dim: brightness(var(--hx-clear-dim));
+  color: var(--hx-fg);
+  text-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+  background-color: var(--hx-glass-clear);
+  background-image: var(--hx-glass-grain);
+  background-size: 160px 160px;
+  border: 1px solid rgb(255 255 255 / 0.18);
+  box-shadow:
+    inset 0 1px 0 0 var(--hx-glass-highlight),
+    var(--hx-glass-shadow);
+  --hx-glass-filter: blur(calc(var(--hx-glass-blur) * 0.5)) saturate(180%) brightness(var(--hx-clear-dim));
 }
 
 /* Tinted glass: colored glass for filled actions (primary by default).
@@ -462,7 +583,8 @@
     0 6px 16px -6px
       color-mix(in oklch, var(--hx-stain, var(--hx-primary-stain)) var(--hx-stain-shadow-far), transparent),
     var(--hx-stain-shadow-neutral);
-  backdrop-filter: blur(calc(var(--hx-glass-blur) * 1.5)) saturate(180%);
+  backdrop-filter: blur(var(--hx-stain-blur, calc(var(--hx-glass-blur) * 1.5))) saturate(180%) var(--hx-liquid-dim,)
+    var(--hx-liquid-refraction,);
 
   &:hover {
     --hx-stain-lift: calc(var(--hx-stain-extra, 0%) + var(--hx-stain-hover));
@@ -473,12 +595,19 @@
   }
 }
 
+/* Ring: an outlined control. Bare on a frosted page; under liquid glass it is a clear pane, so its label
+   never sits on the raw page (with all three values unset the declaration is dropped). */
+@utility glass-ring {
+  -webkit-backdrop-filter: var(--hx-ring-filter,) var(--hx-liquid-dim,) var(--hx-liquid-refraction,);
+  backdrop-filter: var(--hx-ring-filter,) var(--hx-liquid-dim,) var(--hx-liquid-refraction,);
+}
+
 /* Form fields: recessed into the glass — darker fill, firm border, inner top shadow. */
 @utility glass-field {
   background-color: var(--hx-glass-field);
   border: 1px solid var(--hx-field-border);
   box-shadow: inset 0 1px 2px 0 var(--hx-field-inset);
-  backdrop-filter: blur(calc(var(--hx-glass-blur) * 0.5));
+  backdrop-filter: blur(calc(var(--hx-glass-blur) * 0.5)) var(--hx-liquid-dim,);
 }
 
 /* Glass bead: the switch thumb — white pebble with a top highlight and a soft drop shadow. */
@@ -506,7 +635,15 @@
  * Form fields (glass-field) are excluded: inputs cannot have pseudo-elements.
  * ------------------------------------------------------------------------- */
 @layer components {
-  :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog, .hx\:glass-tint, .hx\:glass-stained) {
+  :where(
+    .hx\:glass-thin,
+    .hx\:glass,
+    .hx\:glass-strong,
+    .hx\:glass-dialog,
+    .hx\:glass-clear,
+    .hx\:glass-tint,
+    .hx\:glass-stained
+  ) {
     position: relative;
   }
 
@@ -515,6 +652,7 @@
     .hx\:glass,
     .hx\:glass-strong,
     .hx\:glass-dialog,
+    .hx\:glass-clear,
     .hx\:glass-tint,
     .hx\:glass-stained
   )::before {
@@ -532,11 +670,11 @@
 
   /* Blur layer of glass surfaces, behind their content (see the note on glass utilities).
      It redraws the grain and top highlight, which the blur would otherwise smear. */
-  :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog) {
+  :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog, .hx\:glass-clear) {
     isolation: isolate;
   }
 
-  :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog):not(.hx-toast)::after {
+  :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog, .hx\:glass-clear):not(.hx-toast)::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -550,10 +688,66 @@
     pointer-events: none;
   }
 
+  /* Liquid glass (html[data-liquid], set by the LiquidGlass component): blur layers blur less and bend what is
+     behind them along the rim, like a thick pane. The refraction is an SVG filter the component draws for each
+     surface; only Chromium runs one in backdrop-filter, so elsewhere the variable stays unset and surfaces are
+     simply a clearer frosted glass. */
+  :where([data-liquid])
+    :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog, .hx\:glass-clear):not(.hx-toast)::after {
+    --hx-liquid-refraction: inherit;
+    --hx-liquid-dim: inherit;
+    --hx-liquid-frost: inherit;
+    box-shadow:
+      inset 0 1px 0 0 var(--hx-glass-highlight),
+      var(--hx-liquid-rim);
+    -webkit-backdrop-filter: blur(calc(var(--hx-liquid-blur) * var(--hx-liquid-frost, 1))) saturate(180%)
+      var(--hx-liquid-dim,) var(--hx-liquid-refraction,);
+    backdrop-filter: blur(calc(var(--hx-liquid-blur) * var(--hx-liquid-frost, 1))) saturate(180%) var(--hx-liquid-dim,)
+      var(--hx-liquid-refraction,);
+  }
+
   /* Toasts use ::after to bridge the gap between them, and nothing inside them needs to blur. */
   .hx-toast {
     -webkit-backdrop-filter: var(--hx-glass-filter);
     backdrop-filter: var(--hx-glass-filter);
+  }
+
+  /* Clear mode: every surface darkens what is behind it, except one already sitting in a darkened surface. */
+  :where([data-liquid='clear'])
+    :where(
+      .hx\:glass-thin,
+      .hx\:glass,
+      .hx\:glass-strong,
+      .hx\:glass-dialog,
+      .hx\:glass-clear,
+      .hx\:glass-stained,
+      .hx\:glass-ring,
+      .hx\:glass-field
+    ) {
+    --hx-liquid-dim: brightness(var(--hx-clear-dim));
+    text-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+  }
+
+  :where([data-liquid='clear'])
+    :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog, .hx\:glass-clear)
+    :where(
+      .hx\:glass-thin,
+      .hx\:glass,
+      .hx\:glass-strong,
+      .hx\:glass-dialog,
+      .hx\:glass-clear,
+      .hx\:glass-stained,
+      .hx\:glass-ring,
+      .hx\:glass-field
+    ) {
+    --hx-liquid-dim: initial;
+  }
+
+  :where([data-liquid]) .hx-toast {
+    -webkit-backdrop-filter: blur(calc(var(--hx-liquid-blur) * var(--hx-liquid-frost, 1))) saturate(180%)
+      var(--hx-liquid-dim,) var(--hx-liquid-refraction,);
+    backdrop-filter: blur(calc(var(--hx-liquid-blur) * var(--hx-liquid-frost, 1))) saturate(180%) var(--hx-liquid-dim,)
+      var(--hx-liquid-refraction,);
   }
 }
 
@@ -792,6 +986,7 @@
     --hx-glass: #ffffff;
     --hx-glass-strong: #ffffff;
     --hx-glass-dialog: #ffffff;
+    --hx-glass-clear: #1f2430;
     --hx-glass-raised: #ffffff;
     --hx-glass-field: #ffffff;
   }
@@ -801,6 +996,7 @@
     --hx-glass: #141414;
     --hx-glass-strong: #171717;
     --hx-glass-dialog: #171717;
+    --hx-glass-clear: #171717;
     --hx-glass-raised: #2a2a2f;
     --hx-glass-field: #0f0f0f;
   }
@@ -812,6 +1008,7 @@
     --hx-glass: #ffffff;
     --hx-glass-strong: #ffffff;
     --hx-glass-dialog: #ffffff;
+    --hx-glass-clear: #1f2430;
     --hx-glass-raised: #ffffff;
     --hx-glass-thin: #ffffff;
     --hx-glass-field: #ffffff;
@@ -823,6 +1020,7 @@
     --hx-glass: #141414;
     --hx-glass-strong: #171717;
     --hx-glass-dialog: #171717;
+    --hx-glass-clear: #171717;
     --hx-glass-raised: #2a2a2f;
     --hx-glass-thin: #1a1a1a;
     --hx-glass-field: #0f0f0f;
@@ -842,10 +1040,11 @@
     .hx\:glass,
     .hx\:glass-strong,
     .hx\:glass-dialog,
+    .hx\:glass-clear,
     .hx\:glass-tint,
     .hx\:glass-stained
   )::before,
-  :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog):not(.hx-toast)::after {
+  :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog, .hx\:glass-clear):not(.hx-toast)::after {
     display: none;
   }
 
