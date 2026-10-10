@@ -556,8 +556,8 @@ The material details can be tuned, and each one is turned off with `none`:
 ```
 
 Available tokens: `--hx-fg`, `--hx-fg-muted`, `--hx-fg-subtle`, `--hx-brand`, `--hx-primary(-hover|-fg)`, `--hx-accent`,
-`--hx-danger(-hover|-fg)`, `--hx-danger-solid(-hover)`, `--hx-stain-*`, `--hx-primary-stain(-text)`, `--hx-danger-stain(-text)`, `--hx-ring`, `--hx-glass-thin`, `--hx-glass`, `--hx-glass-strong`,
-`--hx-glass-raised`, `--hx-glass-dialog`, `--hx-glass-field`, `--hx-glass-border`, `--hx-liquid-*`, `--hx-pane-*`,
+`--hx-danger(-hover|-fg)`, `--hx-stain-*`, `--hx-primary-stain(-text)`, `--hx-danger-stain(-text)`, `--hx-ring`, `--hx-glass-thin`, `--hx-glass`, `--hx-glass-strong`,
+`--hx-glass-dialog`, `--hx-glass-field`, `--hx-glass-border`, `--hx-liquid-*`, `--hx-pane-*`,
 `--hx-tint-hover`, `--hx-tint-active`, `--hx-backdrop-*`… The full list, with the light and dark values, is in
 [`src/styles/index.css`](https://github.com/noah-bar/HexUI/blob/main/src/styles/index.css).
 
@@ -634,7 +634,7 @@ A few rules to follow when you build your own elements on top of HexUI surfaces.
 ### Blurred elements inside a glass surface
 
 Surfaces (`glass-thin`, `glass`, `glass-strong`, `glass-dialog`) do not blur by themselves: their blur is carried
-by an `::after` pseudo-element placed behind their content, set by `--hx-glass-filter`. This way, a blurred element
+by an `::after` pseudo-element placed behind their content, set by `--hx-glass-filter` (`none` turns it off). This way, a blurred element
 placed inside (sticky header, floating bar, button) does blur the surface's content. In Chrome, an element that has
 a `backdrop-filter` itself prevents its children from blurring what it contains.
 So do not use `::after` on a glass surface, nor a negative `z-index` inside it: the blur would cover it.

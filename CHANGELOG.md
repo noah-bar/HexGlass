@@ -21,9 +21,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Checked switches, checkboxes and radios use a thinner tinted pane with a colored frame and a recessed top, without the white top gloss.
 - The filled range of `Slider` and the bar of `Progress` use the same tinted glass instead of a flat accent color; a complete progress bar stays green.
 - Page buttons of `Pagination` are round.
-- Toasts use the standard surface veil with a light frost instead of the dialog surface.
+- Toasts use the standard surface veil with the frost of an elevated surface instead of the dialog surface.
 - Outline buttons sit on a glass pane instead of the bare page.
 - The `sideEffects` field of the package lists the entry point, which starts the refraction engine.
+
+### Removed
+
+- `--hx-glass-blur`: use `--hx-liquid-blur`.
+- `--hx-glass-raised`, `--hx-danger-solid`, `--hx-danger-solid-hover`, `--hx-danger-stain-extra`, `--hx-stain-extra`, `--hx-stain-rim`, `--hx-stain-gloss`, `--hx-stain-caustic` and `--hx-stain-floor`, which no component used any more.
 
 ### Fixed
 

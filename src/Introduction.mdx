@@ -5,21 +5,25 @@ import { Meta } from '@storybook/addon-docs/blocks';
 # HexUI
 
 Hex-Tech's React component library, built on **Base UI** (behavior & accessibility)
-and **Tailwind CSS v4** (styling), with a visual signature: **professional glassmorphism**.
+and **Tailwind CSS v4** (styling), with a visual signature: **professional liquid glass**.
 
 ## Glass principles
 
-- **Readability first**: surfaces stay 70–85% opaque, and blur serves depth, not decoration.
-- **Six levels**:
+- **Panes, not frost**: surfaces blur what is behind them only lightly, and their rim bends it like the edge of
+  a thick piece of glass (in Chromium browsers).
+- **Readability first**: in the dark theme, or over a `Backdrop` image, each pane evens out what is behind it,
+  darker under white text and lighter under dark text, so text holds over a photo. A plain light page keeps
+  lightly veiled panes.
+- **Surfaces**:
   - `glass-thin`: navigation, toolbars, tabs (little text);
   - `glass`: cards, panels;
-  - `glass-strong`: menus, tooltips;
-  - `glass-dialog`: dialogs and toasts, more transparent but heavily blurred;
+  - `glass-strong`: menus, popovers, tooltips, toasts, with more frost;
+  - `glass-dialog`: dialogs and sheets, with the strongest frost;
   - `glass-field`: form fields;
-  - `glass-tint`: tinted glass for actions (primary and danger buttons, checked switch), filled at 85% minimum
-    so white text stays readable.
-- **A real material**: lit edge at the top left, a light sheen at the top, a very fine frosted-glass grain.
-  No element is a flat opaque fill, and there is no glow.
+  - `glass-stained`: primary and danger buttons, a dense colored pane with white text;
+  - `glass-tint`: checked switches, checkboxes and radios, slider and progress bars.
+- **A real material**: lit edge at the top left, a very fine grain, an inner glow along the rim. There is no
+  glow around elements.
 - **Hover and selection**: _inside_ a glass surface (rows, list items, ghost button), use a light
   `tint-hover` / `tint-active` veil. _On_ a glass element (secondary button), use `glass-hover`.
   A selected element sitting on glass (tab indicator) is always lighter than its container.
@@ -44,6 +48,6 @@ Every color is an overridable `--hx-*` CSS variable:
 ```css
 :root {
   --hx-accent: #a5b4fc;
-  --hx-glass-blur: 12px;
+  --hx-liquid-blur: 12px;
 }
 ```
