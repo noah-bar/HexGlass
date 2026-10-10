@@ -36,7 +36,7 @@ const preview: Preview = {
     },
   },
   initialGlobals: {
-    // Clear liquid glass needs a picture behind it: on a plain light page it turns flat gray.
+    // Clear liquid glass needs a picture behind it; other backgrounds fall back to regular liquid glass in light.
     backdrop: 'image',
   },
   decorators: [
@@ -51,7 +51,7 @@ const preview: Preview = {
             ) : (
               <Backdrop position="absolute" variant={backdrop} />
             ))}
-          <LiquidGlass clear />
+          <LiquidGlass clear="auto" />
           <Story />
         </div>
       );
