@@ -603,7 +603,54 @@ Liquid glass is the library's material: there is nothing to turn on.
   pauses on a surface while it resizes. Only Chromium browsers run such a filter in `backdrop-filter`: elsewhere
   surfaces are the same panes without the bent rim.
 
-Tune it with CSS variables, on the root or on any subtree:
+### Letting the user adjust it
+
+The `useLiquidGlass` hook holds the user's own glass settings: how much the glass blurs what is behind it, and
+whether its rim bends it. They apply to the whole page and are remembered in `localStorage`. Build the control
+you want with it, for example a slider and a switch on a settings page:
+
+```tsx
+import { Button, Slider, Switch, useLiquidGlass } from '@hxtc/hexui';
+
+function GlassSettings() {
+  const { blur, refraction, refractionSupported, customized, setBlur, setRefraction, reset } = useLiquidGlass();
+
+  return (
+    <>
+      <Slider
+        label="Glass blur"
+        showValue
+        min={0}
+        max={24}
+        value={blur}
+        onValueChange={(value) => setBlur(Number(value))}
+      />
+      {refractionSupported && (
+        <label>
+          Refraction <Switch checked={refraction} onCheckedChange={setRefraction} />
+        </label>
+      )}
+      <Button variant="ghost" disabled={!customized} onClick={reset}>
+        Reset
+      </Button>
+    </>
+  );
+}
+```
+
+- `blur` is the blur in effect, in px: the user's choice, or the theme's value.
+- `refractionSupported` is `false` in browsers that cannot render the refraction: hide the switch there.
+- `customized` tells whether the user changed anything; `reset` goes back to the theme's values.
+
+To avoid a flash of the default glass on load, render `liquidGlassScript` in `<head>`, next to `themeScript`:
+
+```tsx
+<script dangerouslySetInnerHTML={{ __html: liquidGlassScript }} />
+```
+
+### Tokens
+
+The defaults are set with CSS variables, on the root or on any subtree:
 
 ```css
 :root {
@@ -759,8 +806,8 @@ Each entry lists the exports of a component and its main options. Props not list
   choice, or `multiple`), `toggleVariants`. Two-state button, pressed with the same glass as the sidebar's active
   item.
 - **Tooltip** — `TooltipProvider`, `Tooltip`, `TooltipTrigger`, `TooltipContent`.
-- **Hooks and utilities** — `useTheme`, `themeScript`, `useMediaQuery(query)`, `useDebouncedValue(value, delay)`
-  (300 ms by default), `cn(...classes)`, `startLiquidGlass()` (see [Liquid glass](#liquid-glass)).
+- **Hooks and utilities** — `useTheme`, `themeScript`, `useLiquidGlass`, `liquidGlassScript`, `useMediaQuery(query)`,
+  `useDebouncedValue(value, delay)` (300 ms by default), `cn(...classes)`, `startLiquidGlass()` (see [Liquid glass](#liquid-glass)).
 
 ## Browser support
 

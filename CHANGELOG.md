@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Liquid glass as the library's material: surfaces are lightly blurred panes whose rim bends what is behind them. The refraction is an SVG displacement filter drawn for each surface, started with the library and shown in Chromium browsers.
 - Clear glass in the dark theme and over a `Backdrop` image: every surface becomes a nearly transparent pane that evens out its own backdrop, darker under white text in the dark theme and lighter under dark text in the light theme.
 - `--hx-liquid-blur`, `--hx-liquid-bezel`, `--hx-liquid-bend`, `--hx-liquid-fringe`, `--hx-liquid-rim` and `--hx-pane-tone` tokens to tune the material.
+- `useLiquidGlass`: the user's own glass settings (blur, refraction on or off) for the whole page, remembered in `localStorage`. `liquidGlassScript` applies them before the first paint.
 - `startLiquidGlass()` to draw the refraction in another document.
 - `--hx-tint-density`, `--hx-tint-frame`, `--hx-tint-glow`, `--hx-tint-sheen`, `--hx-tint-shadow` and `--hx-tint-filter` tokens for tinted glass, and `--hx-stain-tone` for stained glass.
 
