@@ -63,23 +63,23 @@
 
   --hx-ring: color-mix(in oklch, var(--hx-accent) 55%, transparent);
 
-  /* Stained glass (primary and danger buttons), light theme: a tinted pane the page shows through,
-     lighter at the top and denser at the bottom so it reads as volume, with dark colored text
-     (≥ 5.5:1 at rest, ≥ 4.5:1 at the bottom on hover). */
+  /* Stained glass (primary and danger buttons): the same button on every page and in both themes — a dense
+     tinted pane, lighter at the top and denser at the bottom, with white text. It darkens what is behind it
+     itself (--hx-stain-tone), so the white holds on a pale page and the page still shows through. */
   --hx-primary-stain: #4f46e5;
   --hx-danger-stain: #dc2626;
-  --hx-primary-stain-text: #3730a3;
-  --hx-danger-stain-text: #691616;
-  --hx-stain-top: 12%;
-  --hx-stain-bottom: 30%;
+  --hx-primary-stain-text: #ffffff;
+  --hx-danger-stain-text: #ffffff;
+  --hx-stain-top: 48%;
+  --hx-stain-bottom: 64%;
+  --hx-stain-tone: contrast(0.6) brightness(0.62);
   --hx-stain-hover: 12%;
   --hx-stain-frame: 68%;
   /* Light comes through the pane and tints the surface below: a colored shadow instead of a gray one. */
   --hx-stain-shadow-near: 22%;
   --hx-stain-shadow-far: 45%;
   --hx-stain-shadow-neutral: 0 0 #0000;
-  /* Red is complementary to the cyan backdrop glow and turns gray when too thin: danger gets more. */
-  --hx-danger-stain-extra: 8%;
+  --hx-danger-stain-extra: 0%;
   /* One colored lit border (see glass-stained): no separate white rim or gloss on a pale pane. */
   --hx-stain-rim: 0;
   --hx-stain-gloss: 0;
@@ -199,15 +199,15 @@
 
   --hx-ring: color-mix(in oklch, var(--hx-accent) 60%, transparent);
 
-  /* Stained glass over dark surfaces: same tonal look as the light theme — a tinted pane the page
-     shows through, light colored text (≥ 7.9:1 measured), one colored lit border. */
+  /* Stained glass over dark surfaces: the same dense pane and white text as the light theme. */
   --hx-primary-stain: #4f46e5;
   --hx-danger-stain: #dc2626;
-  --hx-primary-stain-text: #c7d2fe;
-  --hx-danger-stain-text: #fecaca;
+  --hx-primary-stain-text: #ffffff;
+  --hx-danger-stain-text: #ffffff;
   --hx-danger-stain-extra: 0%;
-  --hx-stain-top: 22%;
-  --hx-stain-bottom: 32%;
+  --hx-stain-top: 44%;
+  --hx-stain-bottom: 60%;
+  --hx-stain-tone: contrast(0.75) brightness(0.7);
   --hx-stain-hover: 10%;
   --hx-stain-frame: 75%;
   --hx-stain-shadow-near: 0%;
@@ -327,12 +327,6 @@
   --hx-glass-raised: rgb(255 255 255 / 0.16);
   /* Dialogs darken what is behind them themselves: a lighter veil is enough to set them apart. */
   --hx-glass-overlay: rgb(0 0 0 / 0.4);
-  /* Colored buttons: tinted glass dense enough for white text (≥ 4.5:1 over a darkened bright photo). */
-  --hx-primary-stain-text: #ffffff;
-  --hx-danger-stain-text: #ffffff;
-  --hx-stain-top: 44%;
-  --hx-stain-bottom: 60%;
-  --hx-danger-stain-extra: 0%;
   /* Fields: a lighter inset instead of a dark well, drawn by its pale border. */
   --hx-glass-field: rgb(255 255 255 / 0.1);
   --hx-field-border: rgb(255 255 255 / 0.3);
@@ -382,14 +376,6 @@
   --hx-neutral-text: #334155;
   --hx-danger-text: #7f1d1d;
   --hx-accent: #3730a3;
-  /* Colored buttons are the one saturated thing on a pale page: dense tinted glass with white text. They
-     darken what is behind them themselves (see --hx-stain-tone), so the page still shows through. */
-  --hx-primary-stain-text: #ffffff;
-  --hx-danger-stain-text: #ffffff;
-  --hx-stain-top: 48%;
-  --hx-stain-bottom: 64%;
-  --hx-danger-stain-extra: 0%;
-  --hx-stain-tone: contrast(0.6) brightness(0.62);
   --hx-tint-tone: var(--hx-stain-tone);
   --hx-glass-sheen: none;
   --hx-glass-hover: rgb(255 255 255 / 0.4);
@@ -640,7 +626,7 @@
     0 6px 16px -6px
       color-mix(in oklch, var(--hx-stain, var(--hx-primary-stain)) var(--hx-stain-shadow-far), transparent),
     var(--hx-stain-shadow-neutral);
-  backdrop-filter: blur(var(--hx-stain-blur, calc(var(--hx-glass-blur) * 1.5))) saturate(180%) var(--hx-liquid-dim,)
+  backdrop-filter: blur(var(--hx-stain-blur, calc(var(--hx-glass-blur) * 1.5))) saturate(180%) var(--hx-stain-tone,)
     var(--hx-liquid-refraction,);
 
   &:hover {
@@ -800,15 +786,7 @@
   :where(
       :is([data-liquid='clear'], [data-liquid='clear-auto']:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image)))
     )
-    :where(
-      .hx\:glass-thin,
-      .hx\:glass,
-      .hx\:glass-strong,
-      .hx\:glass-dialog,
-      .hx\:glass-stained,
-      .hx\:glass-ring,
-      .hx\:glass-field
-    ) {
+    :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog, .hx\:glass-ring, .hx\:glass-field) {
     --hx-liquid-dim: var(--hx-clear-tone);
     text-shadow: var(--hx-clear-text-shadow);
   }
@@ -817,27 +795,8 @@
       :is([data-liquid='clear'], [data-liquid='clear-auto']:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image)))
     )
     :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog)
-    :where(
-      .hx\:glass-thin,
-      .hx\:glass,
-      .hx\:glass-strong,
-      .hx\:glass-dialog,
-      .hx\:glass-stained,
-      .hx\:glass-ring,
-      .hx\:glass-field
-    ) {
+    :where(.hx\:glass-thin, .hx\:glass, .hx\:glass-strong, .hx\:glass-dialog, .hx\:glass-ring, .hx\:glass-field) {
     --hx-liquid-dim: initial;
-  }
-
-  /* Light theme: colored buttons darken their own backdrop wherever they sit, even inside a lightened pane. */
-  :where(
-      :is(
-        [data-liquid='clear'],
-        [data-liquid='clear-auto']:is(.dark, [data-theme='dark'], :has(.hx-backdrop-image))
-      ):not(.dark, [data-theme='dark'])
-    )
-    .hx\:glass-stained {
-    --hx-liquid-dim: var(--hx-stain-tone);
   }
 
   /* Toasts pile up: if each evened out what is behind it, the front one would sit on a solid stack. Only the
