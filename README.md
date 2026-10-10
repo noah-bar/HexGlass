@@ -11,7 +11,7 @@ Tailwind CSS v4, shipped as precompiled CSS.
 [Changelog](https://github.com/noah-bar/HexUI/blob/main/CHANGELOG.md) ·
 [Issues](https://github.com/noah-bar/HexUI/issues)
 
-![A billing screen built with HexUI: glass sidebar, sticky header and invoice table](https://raw.githubusercontent.com/noah-bar/HexUI/main/docs/screenshot.jpg)
+![A billing screen built with HexUI: liquid glass sidebar, sticky header and invoice table](https://raw.githubusercontent.com/noah-bar/HexUI/main/docs/screenshot.jpg)
 
 - **About 40 components**, from buttons and fields to a data table, a command palette and a full sidebar layout.
 - **Liquid glass that stays readable**: clear panes with a lit edge, a fine grain and a rim that bends what is
