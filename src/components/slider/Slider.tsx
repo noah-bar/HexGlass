@@ -61,7 +61,8 @@ export function Slider({
             vertical ? 'hx:h-full hx:w-1.5' : 'hx:h-1.5 hx:w-full',
           )}
         >
-          <BaseSlider.Indicator className="hx:rounded-full hx:bg-accent" />
+          {/* Same tinted glass as a checked switch; the lit edge is left out on a bar this thin. */}
+          <BaseSlider.Indicator className="hx:glass-tint hx:rounded-full hx:before:hidden" />
           {Array.from({ length: count }, (_, index) => (
             <BaseSlider.Thumb
               key={index}
