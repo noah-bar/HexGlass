@@ -9,7 +9,7 @@ const meta = {
   tags: ['autodocs'],
   args: { variant: 'default' },
   argTypes: {
-    variant: { control: 'inline-radio', options: ['thin', 'default', 'strong', 'clear'] },
+    variant: { control: 'inline-radio', options: ['thin', 'default', 'strong'] },
   },
 } satisfies Meta<typeof Panel>;
 
@@ -26,15 +26,14 @@ export const Default: Story = {
 
 export const Variants: Story = {
   render: (args) => (
-    <div className="hx:grid hx:max-w-4xl hx:grid-cols-1 hx:gap-4 hx:sm:grid-cols-4">
-      {(['thin', 'default', 'strong', 'clear'] as const).map((variant) => (
+    <div className="hx:grid hx:max-w-3xl hx:grid-cols-1 hx:gap-4 hx:sm:grid-cols-3">
+      {(['thin', 'default', 'strong'] as const).map((variant) => (
         <Panel key={variant} {...args} variant={variant} className="hx:text-sm">
           <p className="hx:font-semibold">{variant}</p>
           <p className="hx:mt-1 hx:text-fg-muted">
             {variant === 'thin' && 'Navigation, toolbars: little text.'}
             {variant === 'default' && 'Containers, tables, lists.'}
             {variant === 'strong' && 'Long content or content to read carefully.'}
-            {variant === 'clear' && 'Over photos and video: white text.'}
           </p>
         </Panel>
       ))}
@@ -113,10 +112,21 @@ const scenery = {
   dark: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1600&q=80',
 };
 
+const headline = [
+  { text: 'Refraction', color: 'hx:text-slate-900 hx:dark:text-white' },
+  { text: 'bends what', color: 'hx:text-indigo-700 hx:dark:text-indigo-300' },
+  { text: 'is behind', color: 'hx:text-cyan-800 hx:dark:text-cyan-300' },
+  { text: 'the glass', color: 'hx:text-amber-700 hx:dark:text-amber-200' },
+  { text: 'along its', color: 'hx:text-pink-700 hx:dark:text-pink-300' },
+  { text: 'rounded rim', color: 'hx:text-slate-900 hx:dark:text-white' },
+];
+
 /**
- * Liquid glass (the `LiquidGlass` component, mounted for every story) needs something to bend:
- * scroll the page and watch the text slide under the rim of the panels. The `--hx-liquid-*` tokens tune it.
- * The refraction only shows in Chromium browsers; elsewhere the panels are a clearer frosted glass.
+ * Liquid glass (`<LiquidGlass clear="auto" />`, mounted for every story) needs something to show through and
+ * to bend: scroll the page and watch the text slide under the rim of the panels. Over a photo every variant
+ * becomes a clear pane that evens out what is behind it, lighter under dark text in the light theme and
+ * darker under white text in the dark theme. The `--hx-liquid-*` tokens tune the rim.
+ * The refraction only shows in Chromium browsers; elsewhere the panels keep the same look without it.
  */
 export const Liquid: StoryObj<LiquidArgs> = {
   parameters: { backdrop: false, stage: 'bare' },
@@ -152,13 +162,9 @@ export const Liquid: StoryObj<LiquidArgs> = {
         </Panel>
 
         <div className="hx:mx-auto hx:mt-16 hx:grid hx:max-w-3xl hx:gap-10">
-          {['Refraction', 'bends what', 'is behind', 'the glass', 'along its', 'rounded rim'].map((line, i) => (
-            <p
-              key={line}
-              className="hx:text-7xl hx:font-bold hx:tracking-tight hx:text-white hx:odd:text-right"
-              style={{ color: ['#ffffff', '#a5b4fc', '#67e8f9', '#fde68a', '#f9a8d4', '#ffffff'][i] }}
-            >
-              {line}
+          {headline.map(({ text, color }) => (
+            <p key={text} className={`hx:text-7xl hx:font-bold hx:tracking-tight hx:odd:text-right ${color}`}>
+              {text}
             </p>
           ))}
         </div>
@@ -169,7 +175,7 @@ export const Liquid: StoryObj<LiquidArgs> = {
         >
           <p className="hx:font-semibold">Liquid panel</p>
           <p className="hx:mt-1 hx:text-fg-muted">
-            A clearer pane: the middle stays flat and readable, the rim bends the page like a thick piece of glass.
+            The middle stays flat and readable, the rim bends the page like a thick piece of glass.
           </p>
         </Panel>
       </div>
