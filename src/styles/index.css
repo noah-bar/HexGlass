@@ -284,10 +284,11 @@
   /* Checked switches, checkboxes and radios (see glass-tint). --hx-tint-tone is how clear mode evens out what
      is behind them. */
   --hx-tint-density: 60%;
-  --hx-tint-sheen: linear-gradient(180deg, transparent, color-mix(in oklch, var(--hx-primary) 34%, transparent));
-  --hx-tint-border: color-mix(in oklch, var(--hx-primary) 55%, white);
-  --hx-tint-shadow:
-    inset 0 1px 2px 0 rgb(0 0 0 / 0.28), 0 2px 8px -2px color-mix(in oklch, var(--hx-primary) 55%, transparent);
+  --hx-tint-sheen: linear-gradient(180deg, transparent, rgb(0 0 0 / 0.16));
+  --hx-tint-frame: 55%;
+  --hx-tint-frame-base: white;
+  --hx-tint-shadow: inset 0 1px 2px 0 rgb(0 0 0 / 0.28);
+  --hx-tint-glow: 55%;
   --hx-tint-filter: blur(var(--hx-liquid-blur)) saturate(180%) var(--hx-tint-tone,);
   --hx-stain-blur: var(--hx-liquid-blur);
   --hx-ring-filter: blur(var(--hx-liquid-blur)) saturate(180%);
@@ -568,8 +569,17 @@
   background-size:
     160px 160px,
     100% 100%;
-  border: 1px solid var(--hx-tint-border, rgb(255 255 255 / 0.12));
-  box-shadow: var(--hx-tint-shadow, inset 0 1px 0 0 rgb(255 255 255 / 0.25), var(--hx-glass-shadow));
+  /* Frame and transmitted light take the pane's own color, so a recolored pane (a complete progress bar)
+     stays consistent. */
+  border: 1px solid
+    color-mix(
+      in oklch,
+      var(--hx-tint-fill, var(--hx-primary)) var(--hx-tint-frame, 0%),
+      var(--hx-tint-frame-base, rgb(255 255 255 / 0.12))
+    );
+  box-shadow:
+    var(--hx-tint-shadow, inset 0 1px 0 0 rgb(255 255 255 / 0.25), var(--hx-glass-shadow)),
+    0 2px 8px -2px color-mix(in oklch, var(--hx-tint-fill, var(--hx-primary)) var(--hx-tint-glow, 0%), transparent);
   backdrop-filter: var(--hx-tint-filter, blur(var(--hx-glass-blur)) saturate(170%));
 
   &:hover {
