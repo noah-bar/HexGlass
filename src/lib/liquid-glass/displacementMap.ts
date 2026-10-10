@@ -8,16 +8,15 @@ export type DisplacementMapOptions = {
   bezel: number;
 };
 
-/* Above this the map is drawn smaller and stretched by the filter: it is smooth, so nothing shows. */
+/* A larger map is drawn smaller and stretched by the filter: it is smooth, so nothing shows. */
 const MAX_PIXELS = 160_000;
 const CACHE_SIZE = 24;
 const cache = new Map<string, string>();
 
 /**
- * Draws the displacement map of a rounded pane for `feDisplacementMap`: red holds the horizontal shift and green
- * the vertical one, 128 meaning none. The middle of the pane is flat; along the rim the shift points inward and
- * grows toward the edge following a circular arc, like the rounded side of a thick piece of glass.
- * Returns a data URL, or `undefined` when no canvas is available.
+ * Displacement map of a rounded pane for `feDisplacementMap`, as a data URL: red is the horizontal shift, green
+ * the vertical one, 128 none. The middle is flat; along the rim the shift points inward and grows toward the
+ * edge following a circular arc. Returns `undefined` when no canvas is available.
  */
 export function createDisplacementMap({ width, height, radius, bezel }: DisplacementMapOptions): string | undefined {
   const key = `${width}:${height}:${radius}:${bezel}`;
@@ -36,22 +35,20 @@ export function createDisplacementMap({ width, height, radius, bezel }: Displace
   const halfW = width / 2;
   const halfH = height / 2;
   const depth = Math.max(1, Math.min(bezel, halfW, halfH));
-  // The rim follows corners at least as round as it is wide: with a sharper corner its two sides would meet
-  // along the diagonal and leave a visible seam.
+  // Corners at least as round as the rim is wide: sharper, its two sides would meet in a visible seam.
   const r = Math.min(Math.max(radius, depth), halfW, halfH);
 
   const image = context.createImageData(w, h);
   const data = image.data;
-  // Opaque (128, 128, 128) everywhere: no shift. Only the rim is then computed.
+  // No shift anywhere (opaque 128, 128, 128), then only the rim is computed.
   new Uint32Array(data.buffer).fill(0xff808080);
-  // Round corners reach further in than the straight rim.
   const reach = Math.max(depth, r);
   const rimX = Math.ceil((reach / width) * w) + 1;
   const rimY = Math.ceil((reach / height) * h) + 1;
   for (let y = 0; y < h; y++) {
     const flatRow = y >= rimY && y < h - rimY;
     for (let x = 0; x < w; x++) {
-      // Inside a row that only crosses the left and right rims, jump over the flat middle.
+      // Jump over the flat middle of the row.
       if (flatRow && x === rimX && w - rimX > rimX) x = w - rimX;
       const px = ((x + 0.5) / w) * width - halfW;
       const py = ((y + 0.5) / h) * height - halfH;
