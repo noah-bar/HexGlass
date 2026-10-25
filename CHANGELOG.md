@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-10-25
+
 ### Changed
 
 - Renamed from `@hxtc/hexui` to `@hxtc/hexglass`. Replace the package name in your dependencies and imports: components, `hx:` classes, `--hx-*` variables and the `hx-theme` storage key stay the same. The compiled stylesheet is now `dist/hexglass.css`; the `@hxtc/hexglass/styles.css` and `@import '@hxtc/hexglass'` entry points are unchanged.
