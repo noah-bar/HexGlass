@@ -1,9 +1,5 @@
 # HexGlass
 
-> **HexGlass was published as `@hxtc/hexui` up to version 0.5.0.** To migrate, replace the package name in your
-> dependencies and imports: the components, the `hx:` classes and the `--hx-*` variables stay the same. From 1.0.0 on,
-> `@hxtc/hexui` is a different library.
-
 **Liquid glass React components for professional interfaces** — built on [Base UI](https://base-ui.com) and
 Tailwind CSS v4, shipped as precompiled CSS.
 
