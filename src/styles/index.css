@@ -1,5 +1,5 @@
 /*
- * HexUI — design tokens & glass utilities.
+ * HexGlass — design tokens & glass utilities.
  *
  * Every Tailwind utility is prefixed with `hx:` and every theme variable with `--hx-`,
  * so the compiled stylesheet can live next to a consumer's own Tailwind setup without
@@ -361,7 +361,7 @@
 }
 
 /* ---------------------------------------------------------------------------
- * Scoped reset — only touches elements rendered by HexUI (they all carry hx: classes).
+ * Scoped reset — only touches elements rendered by HexGlass (they all carry hx: classes).
  * :where() keeps specificity at zero so every utility still wins.
  * ------------------------------------------------------------------------- */
 @layer base {

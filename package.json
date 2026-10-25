@@ -1,5 +1,5 @@
 {
-  "name": "@hxtc/hexui",
+  "name": "@hxtc/hexglass",
   "version": "0.5.0",
   "description": "Hex-Tech React component library — Base UI + Tailwind CSS, professional liquid glass.",
   "keywords": [
@@ -19,13 +19,13 @@
   ],
   "type": "module",
   "license": "MIT",
-  "homepage": "https://github.com/noah-bar/HexUI#readme",
+  "homepage": "https://github.com/noah-bar/HexGlass#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/noah-bar/HexUI.git"
+    "url": "git+https://github.com/noah-bar/HexGlass.git"
   },
   "bugs": {
-    "url": "https://github.com/noah-bar/HexUI/issues"
+    "url": "https://github.com/noah-bar/HexGlass/issues"
   },
   "sideEffects": [
     "**/*.css",
@@ -37,14 +37,14 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "style": "./dist/hexui.css",
+  "style": "./dist/hexglass.css",
   "exports": {
     ".": {
-      "style": "./dist/hexui.css",
+      "style": "./dist/hexglass.css",
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./styles.css": "./dist/hexui.css"
+    "./styles.css": "./dist/hexglass.css"
   },
   "scripts": {
     "dev": "storybook dev -p 6006",

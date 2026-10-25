@@ -12,7 +12,7 @@ export default defineConfig({
     lib: {
       entry: resolve(import.meta.dirname, 'src/index.ts'),
       formats: ['es'],
-      cssFileName: 'hexui',
+      cssFileName: 'hexglass',
     },
     rolldownOptions: {
       // Every dependency (and its subpaths, e.g. @base-ui/react/dialog) stays external.

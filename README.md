@@ -1,17 +1,21 @@
-# HexUI
+# HexGlass
+
+> **HexGlass was published as `@hxtc/hexui` up to version 0.5.0.** To migrate, replace the package name in your
+> dependencies and imports: the components, the `hx:` classes and the `--hx-*` variables stay the same. From 1.0.0 on,
+> `@hxtc/hexui` is a different library.
 
 **Liquid glass React components for professional interfaces** — built on [Base UI](https://base-ui.com) and
 Tailwind CSS v4, shipped as precompiled CSS.
 
-[![npm version](https://img.shields.io/npm/v/@hxtc/hexui?color=4f46e5)](https://www.npmjs.com/package/@hxtc/hexui)
-[![npm downloads](https://img.shields.io/npm/dm/@hxtc/hexui?color=4f46e5)](https://www.npmjs.com/package/@hxtc/hexui)
-[![license](https://img.shields.io/npm/l/@hxtc/hexui?color=4f46e5)](https://github.com/noah-bar/HexUI/blob/main/LICENSE)
+[![npm version](https://img.shields.io/npm/v/@hxtc/hexglass?color=4f46e5)](https://www.npmjs.com/package/@hxtc/hexglass)
+[![npm downloads](https://img.shields.io/npm/dm/@hxtc/hexglass?color=4f46e5)](https://www.npmjs.com/package/@hxtc/hexglass)
+[![license](https://img.shields.io/npm/l/@hxtc/hexglass?color=4f46e5)](https://github.com/noah-bar/HexGlass/blob/main/LICENSE)
 
-[GitHub](https://github.com/noah-bar/HexUI) · [npm](https://www.npmjs.com/package/@hxtc/hexui) ·
-[Changelog](https://github.com/noah-bar/HexUI/blob/main/CHANGELOG.md) ·
-[Issues](https://github.com/noah-bar/HexUI/issues)
+[GitHub](https://github.com/noah-bar/HexGlass) · [npm](https://www.npmjs.com/package/@hxtc/hexglass) ·
+[Changelog](https://github.com/noah-bar/HexGlass/blob/main/CHANGELOG.md) ·
+[Issues](https://github.com/noah-bar/HexGlass/issues)
 
-![A billing screen built with HexUI: liquid glass sidebar, sticky header and invoice table](https://raw.githubusercontent.com/noah-bar/HexUI/main/docs/screenshot.jpg)
+![A billing screen built with HexGlass: liquid glass sidebar, sticky header and invoice table](https://raw.githubusercontent.com/noah-bar/HexGlass/main/docs/screenshot.jpg)
 
 - **About 40 components**, from buttons and fields to a data table, a command palette and a full sidebar layout.
 - **Liquid glass that stays readable**: clear panes with a lit edge, a fine grain and a rim that bends what is
@@ -44,30 +48,39 @@ Tailwind CSS v4, shipped as precompiled CSS.
 ## Installation
 
 ```bash
-npm install @hxtc/hexui
+npm install @hxtc/hexglass
 ```
 
 Requires React 19.
 
-Import the styles once. In an application that uses Tailwind CSS v4, put HexUI **before** Tailwind in the main
+Import the styles once. In an application that uses Tailwind CSS v4, put HexGlass **before** Tailwind in the main
 stylesheet, so that the classes you pass through `className` win over the component defaults:
 
 ```css
 /* app.css */
-@import '@hxtc/hexui';
+@import '@hxtc/hexglass';
 @import 'tailwindcss';
 ```
 
 Without Tailwind, import the stylesheet from your entry point instead:
 
 ```tsx
-import '@hxtc/hexui/styles.css';
+import '@hxtc/hexglass/styles.css';
 ```
 
 ## Quick start
 
 ```tsx
-import { Backdrop, Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@hxtc/hexui';
+import {
+  Backdrop,
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@hxtc/hexglass';
 
 export function App() {
   return (
@@ -100,8 +113,8 @@ Every component accepts `className`. Your classes are added to the component's o
 
 - The examples in this README use Tailwind classes from the application. Without Tailwind, pass your own CSS
   classes or `style`.
-- HexUI's rules live in the `theme`, `base`, `components` and `utilities` cascade layers. Unlayered CSS always
-  wins over them. Tailwind utilities win when Tailwind is imported after HexUI, as shown in
+- HexGlass's rules live in the `theme`, `base`, `components` and `utilities` cascade layers. Unlayered CSS always
+  wins over them. Tailwind utilities win when Tailwind is imported after HexGlass, as shown in
   [Installation](#installation).
 - To change the rendered element, or to give a trigger the look of a button, use Base UI's `render` prop:
 
@@ -167,7 +180,7 @@ The `useTheme` hook can manage this attribute, follow the system theme and remem
 `localStorage` under the `hx-theme` key:
 
 ```tsx
-import { Button, useTheme } from '@hxtc/hexui';
+import { Button, useTheme } from '@hxtc/hexglass';
 
 function ThemeButton() {
   const { theme, resolvedTheme, setTheme, toggleTheme } = useTheme();
@@ -193,7 +206,7 @@ To avoid a flash of the light theme on load, apply the theme before the first pa
 placed in `<head>`:
 
 ```tsx
-import { themeScript } from '@hxtc/hexui';
+import { themeScript } from '@hxtc/hexglass';
 
 export function Head() {
   return (
@@ -559,7 +572,7 @@ Available tokens: `--hx-fg`, `--hx-fg-muted`, `--hx-fg-subtle`, `--hx-brand`, `-
 `--hx-danger(-hover|-fg)`, `--hx-stain-*`, `--hx-primary-stain(-text)`, `--hx-danger-stain(-text)`, `--hx-ring`, `--hx-glass-thin`, `--hx-glass`, `--hx-glass-strong`,
 `--hx-glass-dialog`, `--hx-glass-field`, `--hx-glass-border`, `--hx-liquid-*`, `--hx-pane-*`,
 `--hx-tint-hover`, `--hx-tint-active`, `--hx-backdrop-*`… The full list, with the light and dark values, is in
-[`src/styles/index.css`](https://github.com/noah-bar/HexUI/blob/main/src/styles/index.css).
+[`src/styles/index.css`](https://github.com/noah-bar/HexGlass/blob/main/src/styles/index.css).
 
 ### Stained glass (primary and danger buttons)
 
@@ -610,7 +623,7 @@ whether its rim bends it. They apply to the whole page and are remembered in `lo
 you want with it, for example a slider and a switch on a settings page:
 
 ```tsx
-import { Button, Slider, Switch, useLiquidGlass } from '@hxtc/hexui';
+import { Button, Slider, Switch, useLiquidGlass } from '@hxtc/hexglass';
 
 function GlassSettings() {
   const { blur, refraction, refractionSupported, customized, setBlur, setRefraction, reset } = useLiquidGlass();
@@ -669,7 +682,7 @@ The engine watches the document it was loaded in. For another document (an ifram
 
 ## Working with glass
 
-A few rules to follow when you build your own elements on top of HexUI surfaces.
+A few rules to follow when you build your own elements on top of HexGlass surfaces.
 
 ### Hover and selection
 
@@ -811,21 +824,21 @@ Each entry lists the exports of a component and its main options. Props not list
 
 ## Browser support
 
-HexUI targets current versions of Chrome, Edge, Firefox and Safari. The refraction of the rim only shows in
+HexGlass targets current versions of Chrome, Edge, Firefox and Safari. The refraction of the rim only shows in
 Chromium browsers (Chrome, Edge, Brave…); Firefox and Safari render the same panes without it. Glass surfaces
 become opaque automatically when the browser does not support `backdrop-filter`, when the user turns on "Reduce
 transparency", and in forced-colors (high contrast) mode. Animations are reduced when the user asks for reduced motion.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on [GitHub](https://github.com/noah-bar/HexUI/issues).
+Bug reports and pull requests are welcome on [GitHub](https://github.com/noah-bar/HexGlass/issues).
 
 ```bash
-git clone https://github.com/noah-bar/HexUI.git
-cd HexUI
+git clone https://github.com/noah-bar/HexGlass.git
+cd HexGlass
 npm install
 npm run dev              # Storybook at http://localhost:6006
-npm run build            # Library build in dist/ (ESM + .d.ts + hexui.css)
+npm run build            # Library build in dist/ (ESM + .d.ts + hexglass.css)
 npm run typecheck
 npm run lint             # ESLint (typescript-eslint, React hooks, Storybook)
 npm run format           # Prettier: format every file (format:check only checks)
@@ -849,4 +862,4 @@ To add a component:
 
 ## License
 
-[MIT](https://github.com/noah-bar/HexUI/blob/main/LICENSE) © Hex-Tech
+[MIT](https://github.com/noah-bar/HexGlass/blob/main/LICENSE) © Hex-Tech
